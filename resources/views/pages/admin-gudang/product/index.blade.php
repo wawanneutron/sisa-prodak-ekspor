@@ -129,7 +129,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Nama Barang</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" placeholder="nama barang">
                                     </div>
                                 </div>
                                 <div class="col-md-6">

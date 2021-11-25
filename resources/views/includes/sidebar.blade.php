@@ -5,11 +5,11 @@
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Menu Utama</li>
-            <li class="nav-item {{ Request::is('/') ? 'active' : '' }}">
+            <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
                 <a href="{{ route('home-dashboard') }}" class="nav-link"><i class="fas fa-rocket"></i><span>Dashboard Statistik</span></a>
             </li>
-            <li class="nav-item {{ Request::is('products') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('products') }}"><i class="fas fa-th-large"></i><span>Produk</span></a>
+            <li class="nav-item {{ Request::is('products-admin') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('products-admin') }}"><i class="fas fa-th-large"></i><span>Produk</span></a>
             </li>
             <li class="menu-header">Produk Lebih</li>
             <li>

@@ -23,10 +23,31 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+
+                $role = Auth::user()->role;
+
+                switch ($role) {
+                    case 'Kepala Gudang':
+                        # code...
+                        return redirect(RouteServiceProvider::KEPALAGUDANG);
+                        break;
+
+                    case 'SPV':
+                        # code...
+                        return redirect(RouteServiceProvider::SPV);
+                        break;
+
+                    case 'Admin Gudang':
+                        # code...
+                        return redirect(RouteServiceProvider::ADMINGUDANG);
+                        break;
+                    default:
+                        # code...
+                        return route('login');
+                        break;
+                }
             }
         }
-
         return $next($request);
     }
 }
