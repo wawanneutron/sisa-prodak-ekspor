@@ -20,7 +20,7 @@ class LoginResponse implements LoginResponseContract
                 return redirect()->intended(config('fortify.admin-gudang'));
 
                 break;
-            case 'Supervisor':
+            case 'SPV':
                 return redirect()->intended(config('fortify.supervisor'));
 
                 break;
