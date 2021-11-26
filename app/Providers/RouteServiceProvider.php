@@ -17,6 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
+    /* handle route redirect setelah login sesuai role */
     public const ADMINGUDANG = '/admin-gudang';
     public const SPV = '/supervisor';
     public const KEPALAGUDANG = '/kepala-gudang';

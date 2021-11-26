@@ -29,7 +29,7 @@
         </ul>
 
         <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
-            <a href="#" class="btn btn-primary btn-lg btn-block btn-icon-split">
+            <a href="#" class="btn btn-primary btn-lg btn-block btn-icon-split"  data-toggle="modal" data-target="#modalLogout">
                 <i class="fas fa-sign-out-alt"></i>Logout
             </a>
         </div>

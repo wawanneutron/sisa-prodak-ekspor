@@ -10,22 +10,32 @@ class LoginResponse implements LoginResponseContract
 
     public function toResponse($request)
     {
-
         // below is the existing response
         // replace this with your own code
         // the user can be located with Auth facade
+        $cek = Auth::user()->role;
 
+        switch ($cek) {
+            case 'Admin Gudang':
+                return redirect()->intended(config('fortify.admin-gudang'));
 
-        if (Auth::user()->role === 'SPV') {
-            return redirect()->intended(config('fortify.supervisor'));
-        } elseif (Auth::user()->role === 'Admin Gudang') {
-            return redirect()->intended(config('fortify.admin-gudang'));
-        } elseif (Auth::user()->role === 'Kepala Gudang') {
-            return redirect()->intended(config('fortify.kepala-gudang'));
+                break;
+            case 'Supervisor':
+                return redirect()->intended(config('fortify.supervisor'));
+
+                break;
+            case 'Kepala Gudang':
+                return redirect()->intended(config('fortify.supervisor'));
+
+                break;
+            default:
+                return route('login');
+                break;
         }
 
+        /* default bawaan fortify */
         // return $request->wantsJson()
         //     ? response()->json(['two_factor' => false])
-        //     : redirect()->intended(config('fortify.admin-gudang'));
+        //     : redirect()->intended(config('fortify.home'));
     }
 }

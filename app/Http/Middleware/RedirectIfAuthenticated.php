@@ -25,7 +25,7 @@ class RedirectIfAuthenticated
             if (Auth::guard($guard)->check()) {
 
                 $role = Auth::user()->role;
-
+                /* menghandle redirect setelah login sesuai dengan role */
                 switch ($role) {
                     case 'Kepala Gudang':
                         # code...
