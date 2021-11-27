@@ -3,9 +3,26 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Data Products</h1>
+                <h1>Data Products (Supervisor)</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="{{ route('home-dashboard') }}">Dashboard</a></div>
+                    <div class="breadcrumb-item active"><a href="
+                            @switch(auth()->user()->role)
+                                      @case('Admin Gudang')
+                                {{ route('statistik-admin') }}
+                                @break
+                                @case('SPV')
+                                    {{ route('statistik-spv') }}
+                                @break
+                                @case('Kepala Gudang')
+                                    {{ route('statistik-kepala') }}
+                                @break
+
+                                @default
+                                    {{ route('login') }}
+                            @endswitch
+                            ">Dashboard
+                        </a>
+                    </div>
                     <div class="breadcrumb-item">Products</div>
                 </div>
             </div>

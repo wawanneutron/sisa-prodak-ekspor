@@ -3,11 +3,11 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Data Products</h1>
+                <h1>Data Pengajuan<b>({{ auth()->user()->role }})</b></h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="
-                            @switch(auth()->user()->role)
-                                     @case('Admin Gudang')
+                                @switch(auth()->user()->role)
+                                          @case('Admin Gudang')
                                 {{ route('statistik-admin') }}
                                 @break
                                 @case('SPV')
@@ -23,7 +23,7 @@
                             ">Dashboard
                         </a>
                     </div>
-                    <div class="breadcrumb-item">Products</div>
+                    <div class="breadcrumb-item">Pengajuan</div>
                 </div>
             </div>
 

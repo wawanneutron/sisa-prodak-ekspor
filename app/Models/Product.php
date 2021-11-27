@@ -10,6 +10,6 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'no_po', 'nama_barang', 'satuan', 'tgl_produksi', 'expired', 'status'
+        'no_po', 'nama_barang', 'satuan', 'qty', 'tgl_produksi', 'tgl_export', 'export_country', 'expired', 'status'
     ];
 }

@@ -18,9 +18,12 @@ class CreateProductsTable extends Migration
             $table->string('no_po');
             $table->string('nama_barang');
             $table->string('satuan')->default('karton');
+            $table->bigInteger('qty');
             $table->date('tgl_produksi');
+            $table->date('tgl_export');
+            $table->string('export_country');
             $table->date('expired');
-            $table->enum('status', ['Export', 'Sisa Export']);
+            $table->enum('status', ['Export']);
             $table->timestamps();
         });
     }

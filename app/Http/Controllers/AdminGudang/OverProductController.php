@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\AdminGudang;
 
 use App\Http\Controllers\Controller;
+use App\Models\OverProduct;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class OverProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('pages.admin-gudang.product.index');
+        $overProducts = OverProduct::paginate(10);
+
+        return view('pages.admin-gudang.over.index', compact('overProducts'));
     }
 
     /**

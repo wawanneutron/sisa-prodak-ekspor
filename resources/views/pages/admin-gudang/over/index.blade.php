@@ -3,7 +3,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Data Products ({{ auth()->user()->role }})</h1>
+                <h1>Data Prodak Lebih</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active">
                         <a href="
@@ -70,9 +70,9 @@
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
-                                        @forelse ($products as $index => $product)
-                                        <tr>
-                                            <td>{{ ++$index + ($products->currentPage() - 1) * $products->perPage() }}</td>
+                                        @forelse ($overProducts as $index => $product)
+                                        {{-- <tr>
+                                            <td>{{ ++$index + ($overProducts->currentPage() - 1) * $overProducts->perPage() }}</td>
                                             <td>{{ $product->no_po }}</td>
                                             <td>{{ $product->nama_barang }}</td>
                                             <td>{{ $product->export_country }}</td>
@@ -112,7 +112,7 @@
                                                 @default
                                                     
                                             @endswitch
-                                        </tr>
+                                        </tr> --}}
                                         @empty
                                             <div class="alert alert-danger alert-dismissible show fade">
                                                 <div class="alert-body">
@@ -129,10 +129,10 @@
                             <div class="card-footer text-right">
                                 <nav class="d-inline-block">
                                     {{-- pagination-costom --}}
-                                    @if ($products->hasPages())
+                                    @if ($overProducts->hasPages())
                                         <ul class="pagination" role="navigation">
                                             {{-- Previous Page Link --}}
-                                            @if ($products->onFirstPage())
+                                            @if ($overProducts->onFirstPage())
                                                 <li class="page-item disabled" aria-disabled="true"
                                                     aria-label="@lang('pagination.previous')">
                                                     <span class="page-link" aria-hidden="true"><i
@@ -141,7 +141,7 @@
                                             @else
                                                 <li class="page-item">
                                                     <a class="page-link"
-                                                    href="{{ $products->previousPageUrl() }}"
+                                                    href="{{ $overProducts->previousPageUrl() }}"
                                                     rel="prev"
                                                     aria-label="@lang('pagination.previous')"><i
                                                         class="fas fa-chevron-left"></i></a>
@@ -149,23 +149,23 @@
                                             @endif
         
                                             <?php
-                                            $start = $products->currentPage() - 1; // show 3 pagination links before current
-                                            $end = $products->currentPage() + 1; // show 3 pagination links after current
+                                            $start = $overProducts->currentPage() - 1; // show 3 pagination links before current
+                                            $end = $overProducts->currentPage() + 1; // show 3 pagination links after current
                                             if ($start < 1) {
                                                 $start = 1; // reset start to 1
                                                 $end += 1;
                                             }
-                                            if ($end >= $products->lastPage()) {
-                                                $end = $products->lastPage();
+                                            if ($end >= $overProducts->lastPage()) {
+                                                $end = $overProducts->lastPage();
                                             } // reset end to last page
                                             ?>
         
                                             @if ($start > 1)
                                                 <li class="page-item">
                                                     <a class="page-link"
-                                                    href="{{ $products->url(1) }}">{{ 1 }}</a>
+                                                    href="{{ $overProducts->url(1) }}">{{ 1 }}</a>
                                                 </li>
-                                                @if ($products->currentPage() != 4)
+                                                @if ($overProducts->currentPage() != 4)
                                                     {{-- "Three Dots" Separator --}}
                                                     <li class="page-item disabled" aria-disabled="true">
                                                         <span class="page-link">...</span>
@@ -174,13 +174,13 @@
                                             @endif
                                             @for ($i = $start; $i <= $end; $i++)
                                                 <li
-                                                    class="page-item {{ $products->currentPage() == $i ? ' active' : '' }}">
+                                                    class="page-item {{ $overProducts->currentPage() == $i ? ' active' : '' }}">
                                                     <a class="page-link"
-                                                    href="{{ $products->url($i) }}">{{ $i }}</a>
+                                                    href="{{ $overProducts->url($i) }}">{{ $i }}</a>
                                                 </li>
                                             @endfor
-                                            @if ($end < $products->lastPage())
-                                                @if ($products->currentPage() + 3 != $products->lastPage())
+                                            @if ($end < $overProducts->lastPage())
+                                                @if ($overProducts->currentPage() + 3 != $overProducts->lastPage())
                                                     {{-- "Three Dots" Separator --}}
                                                     <li class="page-item disabled" aria-disabled="true">
                                                         <span class="page-link">...</span>
@@ -188,15 +188,15 @@
                                                 @endif
                                                 <li class="page-item">
                                                     <a class="page-link"
-                                                    href="{{ $products->url($products->lastPage()) }}">{{ $products->lastPage() }}</a>
+                                                    href="{{ $overProducts->url($overProducts->lastPage()) }}">{{ $overProducts->lastPage() }}</a>
                                                 </li>
                                             @endif
         
                                             {{-- Next Page Link --}}
-                                            @if ($products->hasMorePages())
+                                            @if ($overProducts->hasMorePages())
                                                 <li class="page-item">
                                                     <a class="page-link"
-                                                    href="{{ $products->nextPageUrl() }}" rel="next"
+                                                    href="{{ $overProducts->nextPageUrl() }}" rel="next"
                                                     aria-label="@lang('pagination.next')"><i
                                                         class="fas fa-chevron-right"></i></a>
                                                 </li>
@@ -337,7 +337,7 @@
     </div>
 
     {{-- modal edit --}}
-    @foreach ($products as $product)
+    @foreach ($overProducts as $product)
         <div class="modal fade" id="modalEdit{{ $product->id }}" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -455,7 +455,7 @@
     @endforeach
 
     {{-- modal view --}}
-    @foreach ($products as $product)
+    @foreach ($overProducts as $product)
         <div class="modal fade" id="modalView{{ $product->id }}" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">

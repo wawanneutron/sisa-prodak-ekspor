@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>Manajemen Barang Lebih &mdash; PT. Torabika Eka Semesta</title>
 
     @include('includes.style')
@@ -25,6 +26,7 @@
     </div>
 
     @include('includes.script')
+    @stack('addon-script')
 </body>
 
 </html>
