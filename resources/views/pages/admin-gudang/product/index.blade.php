@@ -59,8 +59,8 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-md">
-                                        <tr>
+                                    <table class="table table-hover table-bordered table-md">
+                                        <tr class=" table-active">
                                             <th>No</th>
                                             <th>No PO</th>
                                             <th>Nama Barang</th>

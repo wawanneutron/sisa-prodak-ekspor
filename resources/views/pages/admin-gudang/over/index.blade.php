@@ -3,7 +3,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Data Barang Lebih</h1>
+                <h1>Data Barang Lebih Sisa Ekspor</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active">
                         <a href="
@@ -38,8 +38,8 @@
                         </i>Download Laporan
                     </a>
                 </div>
-                <h2 class="section-title">Data Produk</h2>
-                    <p class="section-lead">Ini adalah data product hasil produksi, yang masuk ke gudang</p>
+                <h2 class="section-title">Barang Lebih</h2>
+                    <p class="section-lead">Ini adalah barang lebih sisa ekspor</p>
                 <div class="row">
                     <div class="col-12 col-md-12">
                         <div class="card">
@@ -47,7 +47,7 @@
                                 @switch(auth()->user()->role)
                                     @case('Admin Gudang')
                                         <a href="#" class=" btn btn-primary" data-toggle="modal" data-target="#modalTambah">
-                                            <i class="fa fa-plus mr-2"></i>Tambah Product
+                                            <i class="fa fa-plus mr-2"></i>Tambah Barang Lebih
                                         </a>
                                     @break
                                     @case('SPV')

@@ -3,7 +3,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Data Barang Lebih</h1>
+                <h1>Data Pengajuan Barang Lebih</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active">
                         <a href="
@@ -38,8 +38,8 @@
                         </i>Download Laporan
                     </a>
                 </div>
-                <h2 class="section-title">Data Produk</h2>
-                    <p class="section-lead">Ini adalah data product hasil produksi, yang masuk ke gudang</p>
+                <h2 class="section-title">Data Pengajuan</h2>
+                    <p class="section-lead">Ini adalah data-data pengajuan</p>
                 <div class="row">
                     <div class="col-12 col-md-12">
                         <div class="card">
@@ -47,7 +47,7 @@
                                 @switch(auth()->user()->role)
                                     @case('Admin Gudang')
                                         <a href="#" class=" btn btn-primary" data-toggle="modal" data-target="#modalTambah">
-                                            <i class="fa fa-plus mr-2"></i>Tambah Product
+                                            <i class="fa fa-plus mr-2"></i>Tambah Pengajuan
                                         </a>
                                     @break
                                     @case('SPV')
@@ -62,11 +62,11 @@
                                     <table class="table table-hover table-bordered table-md">
                                         <tr class=" table-active">
                                             <th>No</th>
-                                            <th>Kode Pengajuan</th>
-                                            <th>Tanggal Pengajuan</th>
+                                            <th class=" col-2">Kode Pengajuan</th>
+                                            <th class="col-2">Tanggal Pengajuan</th>
                                             <th>Status</th>
-                                            <th>Catatan</th>
-                                            <th>Action</th>
+                                            <th class="col-3">Catatan</th>
+                                            <th class="col-2">Action</th>
                                         </tr>
                                         @forelse ($aprovalProducts as $index => $product)
                                         <tr>
@@ -278,7 +278,7 @@
     </div>
 
     {{-- modal edit --}}
-    {{-- @foreach ($aprovalProducts as $product)
+    @foreach ($aprovalProducts as $product)
         <div class="modal fade" id="modalEdit{{ $product->id }}"  data-backdrop="static" data-keyboard="false" aria-hidden="true" role="dialog">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
@@ -328,9 +328,9 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Pilih Product</label>
-                                                <select name="listEditProducts[]" class="select2 form-control  @error('listEditProducts') is-invalid @enderror" multiple id="listEditProducts{{ $product->id }}">
+                                                <select name="listEditPengajuan[]" class="select2 form-control  @error('listEditPengajuan') is-invalid @enderror" multiple id="listEditPengajuan{{ $product->id }}">
                                             </select>
-                                            @error('listProducts')
+                                            @error('listEditPengajuan')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
@@ -367,7 +367,7 @@
                                             <th>Quantity</th>
                                             <th>Kondisi Barang</th>
                                         </tr>
-                                        @foreach ($product->products as $index => $data)
+                                        @foreach ($product->overProducts as $index => $data)
                                             <tr>
                                                 <td>{{ $index +1 }}</td>
                                                 <td>{{ $data->pivot->id }}</td>
@@ -376,7 +376,6 @@
                                                 <td>
                                                     <div class="form-group">
                                                         <label>Jumlah Barang Lebih</label>
-                                                        <input type="hidden" name="pivot_over[]" value="{{ $data->pivot->id }}">
                                                         <input type="number" name="qty_over[]"
                                                             class="form-control @error('qty_over') is-invalid @enderror"
                                                             value="{{ old('qty_over') }}">
@@ -426,37 +425,37 @@
             </div>
             @push('select-edit-script')
                 <script type="text/javascript">
-                    $('#listEditProducts{!! $product->id !!}').select2({
+                    $('#listEditPengajuan{!! $product->id !!}').select2({
                         ajax: {
-                            url: 'http://127.0.0.1:8000/admin-gudang/ajax/products/search',
+                            url: 'http://127.0.0.1:8000/admin-gudang/ajax/over-products/search',
                             processResults: function(data) {
                                 return {
                                     results: data.map(function(item) {
                                         return {
                                             id: item.id,
-                                            text: item.no_po + ' ' + item.nama_barang
+                                            text: item.over_product_id
                                         }
                                     })
                                 }
                             }
                         }
                     });
-                    var products = {!! $product->products !!}
+                    var products = {!! $product->overProducts !!}
 
                     products.forEach(function(item) {
 
-                        var option = new Option(item.no_po + ' ' + item.nama_barang, item.id, true, true);
-                        $('#listEditProducts{!! $product->id !!}').append(option).trigger('change');
+                        var option = new Option(item.over_product_id, item.id, true, true);
+                        $('#listEditPengajuan{!! $product->id !!}').append(option).trigger('change');
 
                     });
                 </script>
             @endpush
         </div>
-    @endforeach --}}
+    @endforeach
     
 
-    {{-- modal view --}}
-  {{-- @foreach ($aprovalProducts as $item)
+     {{-- modal view --}}
+    @foreach ($aprovalProducts as $item)
         <div class="modal fade" id="modalView{{ $item->id }}" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
@@ -484,7 +483,7 @@
                                     <th>Export Country</th>
                                     <th>Tgl Export</th>
                                 </tr>
-                                @foreach ($item->products as $index => $data)
+                                @foreach ($item->overProducts as $index => $data)
                                     <tr>
                                         <td>{{ $index +1 }}</td>
                                         <td>{{ $data->no_po }}</td>
@@ -503,22 +502,22 @@
                                                 <option value="rusak" {{ $data->pivot->kondisi == 'rusak' ? 'selected' : '' }}>Rusak</option>
                                                 <option value="expired" {{ $data->pivot->kondisi == 'expired' ? 'selected' : '' }}>Expired</option>
                                             </select> --}}
-                                        {{-- </td> --}}
-                                        {{-- <td>
+                                        </td>
+                                        <td>
                                             {{ $data->export_country }}
                                         </td>
                                         <td>
                                             {{ $data->tgl_export }}
-                                        </td> --}}
+                                        </td>
                                         
                                         {{-- <td>
                                             <a href="{{ $data->pivot->id }}" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#subModal{{ $data->pivot->id }}">
                                                 <i class="fa fa-pencil-alt"></i>
                                             </a>
                                         </td> --}}
-                                    {{-- </tr> --}}
-                                {{-- @endforeach --}}
-                                {{-- </table>
+                                    </tr>
+                                    @endforeach
+                                </table>
                                 <tr>
                                     <td><span><b>jumlah barang lebih {{ $item->qty_over }} Karton</b></span></td>
                                 </tr>
@@ -526,8 +525,8 @@
                     </div>
                 </div>
             </div>
-        </div> --}}
-    {{-- @endforeach --}}
+        </div>
+    @endforeach
     
 @endsection
 
