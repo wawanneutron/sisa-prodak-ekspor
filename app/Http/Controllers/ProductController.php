@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -58,9 +59,7 @@ class ProductController extends Controller
             'export_country' => 'required',
             'expired' => 'required'
         ]);
-        /**
-         * algorithm create no po
-         */
+
         $length = 4;
         $newRandom = '';
         for ($i = 0; $i < $length; $i++) {
@@ -168,5 +167,17 @@ class ProductController extends Controller
                 'status' => 'error'
             ]);
         }
+    }
+
+    public function ajaxSearch(Request $request)
+    {
+        $keyword = $request->get('q');
+
+        $products = DB::table('products')
+            ->where('no_po', 'LIKE', "%$keyword%")
+            ->orWhere('nama_barang', 'LIKE', "%$keyword%")
+            ->get();
+
+        return $products;
     }
 }

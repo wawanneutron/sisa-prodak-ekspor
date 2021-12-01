@@ -12,4 +12,9 @@ class Product extends Model
     protected $fillable = [
         'no_po', 'nama_barang', 'satuan', 'qty', 'tgl_produksi', 'tgl_export', 'export_country', 'expired', 'status'
     ];
+
+    public function overProducts()
+    {
+        return $this->belongsToMany(OverProduct::class)->withPivot('id', 'qty_over', 'kondisi');
+    }
 }

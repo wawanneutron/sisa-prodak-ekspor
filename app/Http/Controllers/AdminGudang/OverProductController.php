@@ -5,6 +5,8 @@ namespace App\Http\Controllers\AdminGudang;
 use App\Http\Controllers\Controller;
 use App\Models\OverProduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class OverProductController extends Controller
 {
@@ -38,7 +40,40 @@ class OverProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'qty_over' => 'required',
+            'kondisi' => 'required',
+            'listProducts' => 'required',
+            'note' => 'required'
+        ]);
+
+        $length = 7;
+        $rand = '';
+        for ($i = 0; $i < $length; $i++) {
+            $rand .= rand(0, 1) ?
+                rand(0, 9) :
+                chr(rand(ord('a'), ord('z')));
+        }
+        $overCode = 'OVER-' . Str::upper($rand);
+
+        $overProducts = OverProduct::create([
+            'users_id' => auth()->user()->id,
+            'over_product_id' => $overCode,
+            'qty_over' => $request->qty_over,
+            'kondisi' => $request->kondisi,
+            'note'     => $request->note
+        ]);
+
+        $overProducts->products()->attach($request->get('listProducts'));
+
+
+        if ($overProducts) {
+            return redirect()->route('dashboard.over-products.index')
+                ->with(['success' => 'Data Berhasil Disimpan']);
+        } else {
+            return redirect()->route('dashboard.over-products.index')
+                ->with(['success' => 'Data Gagal Disimpan']);
+        }
     }
 
     /**
@@ -72,7 +107,30 @@ class OverProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            // 'qty_over' => 'required',
+            // 'kondisi' => 'required',
+            'listEditProducts' => 'required',
+            'note' => 'required'
+        ]);
+
+        $overProducts = OverProduct::find($id);
+
+        $overProducts->update([
+            'note'     => $request->note,
+        ]);
+
+
+        $overProducts->products()->sync($request->get('listEditProducts'));
+
+
+        if ($overProducts) {
+            return redirect()->route('dashboard.over-products.index')
+                ->with(['success' => 'Data Berhasil Disimpan']);
+        } else {
+            return redirect()->route('dashboard.over-products.index')
+                ->with(['error' => 'Data Gagal Disimpan']);
+        }
     }
 
     /**
@@ -84,5 +142,14 @@ class OverProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function ajaxSearchOver()
+    {
+        $overProducts = DB::table('over_products')
+            ->where('over_product_id', 'like', '%' . request()->q . '%')
+            ->get();
+
+        return $overProducts;
     }
 }

@@ -15,9 +15,8 @@ class CreateAprovalsTable extends Migration
     {
         Schema::create('aprovals', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('over_product_id');
             $table->unsignedBigInteger('users_id');
-            $table->unsignedBigInteger('kd_pengajuan');
+            $table->string('kd_pengajuan');
             $table->text('catatan');
             $table->enum('kondisi', [
                 'not checked',

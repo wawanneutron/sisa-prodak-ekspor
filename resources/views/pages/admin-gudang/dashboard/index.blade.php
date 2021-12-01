@@ -114,8 +114,8 @@
                 <div class="col-12 mt-5">
                     <div class="hero bg-primary text-white">
                         <div class="hero-inner">
-                            <h2>Selamat Datang, Ujang!</h2>
-                            <p class="lead">This page is a place to manage products, over products and more.</p>
+                            <h2>Selamat Datang, {{ auth()->user()->first_name .' '.  auth()->user()->last_name }} !</h2>
+                            <p class="lead">Hii, your role as "{{ auth()->user()->role }}" This page is a place to manage products, over products and more.</p>
                         </div>
                     </div>
                 </div>

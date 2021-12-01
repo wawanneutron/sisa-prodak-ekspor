@@ -16,6 +16,7 @@ class CreateOverProducts extends Migration
         Schema::create('over_products', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('users_id');
+            $table->string('over_product_id');
             $table->bigInteger('qty_over');
             $table->enum('kondisi', [
                 'bagus',

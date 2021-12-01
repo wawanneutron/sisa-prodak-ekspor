@@ -3,7 +3,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Data Prodak Lebih</h1>
+                <h1>Data Barang Lebih</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active">
                         <a href="
@@ -59,27 +59,37 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-md">
-                                        <tr>
+                                    <table class="table table-hover table-bordered table-md">
+                                        <tr class=" table-active">
                                             <th>No</th>
-                                            <th>No PO</th>
+                                            <th>Kode</th>
                                             <th>Nama Barang</th>
-                                            <th>Export Country</th>
-                                            <th>Tgl Export</th>
                                             <th>Quantity</th>
-                                            <th>Status</th>
+                                            <th>Kondisi Barang</th>
                                             <th>Action</th>
                                         </tr>
                                         @forelse ($overProducts as $index => $product)
-                                        {{-- <tr>
+                                        <tr>
                                             <td>{{ ++$index + ($overProducts->currentPage() - 1) * $overProducts->perPage() }}</td>
-                                            <td>{{ $product->no_po }}</td>
-                                            <td>{{ $product->nama_barang }}</td>
-                                            <td>{{ $product->export_country }}</td>
-                                            <td>{{ $product->tgl_export }}</td>
-                                            <td>{{ $product->qty }}</td>
+                                            <td>{{ $product->over_product_id }}</td>
                                             <td>
-                                                <div class="badge badge-success">{{ $product->status }}</div>
+                                                <ul>
+                                                    @foreach ($product->products as $item)
+                                                        <li> {{ $item->nama_barang }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                 {{ $product->qty_over }}
+                                            </td>
+                                            <td>
+                                                @if ($product->kondisi == 'bagus')
+                                                    <div class="badge badge-success">{{ $product->kondisi }}</div>
+                                                @elseif($product->kondisi == 'rusak')
+                                                    <div class="badge badge-danger">{{ $product->kondisi }}</div>
+                                                @else
+                                                    <div class="badge badge-primary">{{ $product->kondisi }}</div>
+                                                @endif
                                             </td>
                                             @switch(auth()->user()->role)
                                                 @case('Admin Gudang')
@@ -112,7 +122,7 @@
                                                 @default
                                                     
                                             @endswitch
-                                        </tr> --}}
+                                        </tr>
                                         @empty
                                             <div class="alert alert-danger alert-dismissible show fade">
                                                 <div class="alert-body">
@@ -222,10 +232,10 @@
     <div class="modal fade" tabindex="-1" role="dialog" id="modalTambah" data-backdrop="static" data-keyboard="false" aria-hidden="true">
         <div div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <form action="{{ route('dashboard.data-products.store') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('dashboard.over-products.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title">Tambah Data</h5>
+                        <h5 class="modal-title">Input Barang Lebih</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -233,27 +243,13 @@
                     <div class="modal-body">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Nama Barang</label>
-                                        <input type="text" name="nama_barang"
-                                            class="form-control @error('nama_barang') is-invalid @enderror"
-                                            value="{{ old('nama_barang') }}"
-                                            placeholder="nama barang">
-                                        @error('nama_barang')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Qty</label>
-                                        <input type="number" name="qty"
-                                            class="form-control @error('qty') is-invalid @enderror"
-                                            value="{{ old('qty') }}" placeholder="qty product">
-                                        @error('qty')
+                                        <label>Jumlah Barang Lebih</label>
+                                        <input type="number" name="qty_over"
+                                            class="form-control @error('qty_over') is-invalid @enderror"
+                                            value="{{ old('qty_over') }}">
+                                        @error('qty_over')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
@@ -263,56 +259,38 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <div class="form-group">
-                                            <label>Satuan</label>
-                                            <input type="text" disabled class="form-control" value="karton">
-                                            <span style="font-size: 12px;" class="text-primary">
-                                                <b>* ini adalah satuan default </b>
-                                            </span>
+                                            <label>Status</label>
+                                            <select name="kondisi" class=" form-control @error('kondisi') is-invalid @enderror">
+                                                <option disabled selected>--Pilih kondisi prodak--</option>
+                                                <option value="bagus">Bagus</option>
+                                                <option value="rusak">Rusak</option>
+                                                <option value="expired">Expired</option>
+                                            </select>
+                                             @error('kondisi')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Tanggal Produksi</label>
-                                        <input type="date" name="tgl_produksi" value="{{ old('tgl_produksi') }}"
-                                            class="form-control @error('tgl_produksi') is-invalid @enderror">
-                                        @error('tgl_produksi')
+                                        <label>Pilih Product</label>
+                                            <select name="listProducts[]" class="select2 form-control  @error('listProducts') is-invalid @enderror" multiple id="listProducts">
+                                        </select>
+                                        @error('listProducts')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Tanggal Expired</label>
-                                        <input type="date" name="expired" value="{{ old('expired') }}"
-                                            class="form-control @error('expired') is-invalid @enderror">
-                                        @error('expired')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Tanggal Export</label>
-                                        <input type="date" name="tgl_export" value="{{ old('tgl_export') }}"
-                                            class="form-control @error('tgl_export') is-invalid @enderror">
-                                        @error('tgl_export')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Export Country</label>
-                                        <input type="text" name="export_country" value="{{ old('export_country') }}"
-                                            class="form-control @error('export_country') is-invalid @enderror">
-                                        @error('export_country')
+                                        <label>Catatan</label>
+                                        <textarea name="note" id="note" class="form-control @error('note') is-invalid @enderror" placeholder="note:" style="height: 100px !important;"></textarea>
+                                        @error('note')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
@@ -338,16 +316,14 @@
 
     {{-- modal edit --}}
     @foreach ($overProducts as $product)
-        <div class="modal fade" id="modalEdit{{ $product->id }}" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+        <div class="modal fade" id="modalEdit{{ $product->id }}"  data-backdrop="static" data-keyboard="false" aria-hidden="true" role="dialog">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
-                    <form action="{{ route('dashboard.data-products.update', $product->id) }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('dashboard.over-products.update', $product->id) }}" method="post" enctype="multipart/form-data">
                         @csrf
-                        @method('PUT')
+                        @method('put')
                         <div class="modal-header">
-                            <h5 class="modal-title">Edit Data <br>
-                                <span class=" text-black-50">{{ $product->no_po }}</span>
-                            </h5>
+                            <h5 class="modal-title">Edit Barang Lebih</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -355,26 +331,13 @@
                         <div class="modal-body">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label>Nama Barang</label>
-                                            <input type="text" name="nama_barang" class="form-control @error('nama_barang') is-invalid @enderror"
-                                                value="{{ old('nama_barang') ?? $product->nama_barang }}"
-                                                placeholder="nama barang">
-                                            @error('nama_barang')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Qty</label>
-                                            <input type="number" name="qty" class="form-control @error('qty') is-i nvalid @enderror"
-                                                value="{{ old('qty') ?? $product->qty }}"
-                                                placeholder="qty product">
-                                            @error('qty')
+                                            <label>Jumlah Barang Lebih</label>
+                                            <input type="number" name="qty_over"
+                                                class="form-control @error('qty_over') is-invalid @enderror"
+                                                value="{{ old('qty_over') ?? $product->qty_over }}">
+                                            @error('qty_over')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
@@ -384,57 +347,38 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <div class="form-group">
-                                                <label>Satuan</label>
-                                                <input type="text" disabled class="form-control" value="{{ $product->satuan }}">
-                                                <span style="font-size: 12px;" class="text-primary">
-                                                    <b>* ini adalah satuan default </b>
-                                                </span>
+                                                <label>Status</label>
+                                                <select name="kondisi" class=" form-control @error('kondisi') is-invalid @enderror">
+                                                    <option disabled selected>--Pilih kondisi prodak--</option>
+                                                    <option value="bagus" {{ $product->kondisi == 'bagus' ? 'selected' : '' }}>Bagus</option>
+                                                    <option value="rusak" {{ $product->kondisi == 'rusak' ? 'selected' : '' }}>Rusak</option>
+                                                    <option value="expired" {{ $product->kondisi == 'expired' ? 'selected' : '' }}>Expired</option>
+                                                </select>
+                                                @error('kondisi')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>Tanggal Produksi</label>
-                                            <input type="date" name="tgl_produksi"
-                                                value="{{ old('tgl_produksi') ?? $product->tgl_produksi }}"
-                                                class="form-control @error('tgl_produksi') is-invalid @enderror">
-                                            @error('tgl_produksi')
+                                            <label>Pilih Product</label>
+                                                <select name="listEditProducts[]" class="select2 form-control  @error('listEditProducts') is-invalid @enderror" multiple id="listEditProducts{{ $product->id }}">
+                                            </select>
+                                            @error('listProducts')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>Tanggal Expired</label>
-                                            <input type="date" name="expired" value="{{ old('expired') ?? $product->expired }}"
-                                                class="form-control @error('expired') is-invalid @enderror">
-                                            @error('expired')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Tanggal Export</label>
-                                            <input type="date" name="tgl_export" value="{{ old('tgl_export') ?? $product->tgl_export }}"
-                                                class="form-control @error('tgl_export') is-invalid @enderror">
-                                            @error('tgl_export')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Export Country</label>
-                                            <input type="text" name="export_country" value="{{ old('export_country') ?? $product->export_country }}"
-                                                class="form-control @error('export_country') is-invalid @enderror">
-                                            @error('export_country')
+                                            <label>Catatan</label>
+                                            <textarea name="note" id="note" class="form-control @error('note') is-invalid @enderror"  style="height: 100px !important;">{{ $product->note }}</textarea>
+                                            @error('note')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
@@ -442,22 +386,116 @@
                                         </div>
                                     </div>
                                 </div>
+                                 <div class="table-responsive">
+                                    <div class="alert alert-info alert-dismissible show fade mt-4">
+                                        <div class="alert-body">
+                                            <button class="close" data-dismiss="alert">
+                                                <span>&times;</span>
+                                            </button>
+                                            Detail barang lebih
+                                        </div>
+                                    </div>
+                                    <table class="table table-hover table-bordered table-md">
+                                        <tr class=" table-active">
+                                            <th>No</th>
+                                            <th>ID</th>
+                                            <th>No PO</th>
+                                            <th>Nama Barang</th>
+                                            <th>Quantity</th>
+                                            <th>Kondisi Barang</th>
+                                        </tr>
+                                        @foreach ($product->products as $index => $data)
+                                            <tr>
+                                                <td>{{ $index +1 }}</td>
+                                                <td>{{ $data->pivot->id }}</td>
+                                                <td>{{ $data->no_po }}</td>
+                                                <td>{{ $data->nama_barang }}</td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <label>Jumlah Barang Lebih</label>
+                                                        <input type="hidden" name="pivot_over[]" value="{{ $data->pivot->id }}">
+                                                        <input type="number" name="qty_over[]"
+                                                            class="form-control @error('qty_over') is-invalid @enderror"
+                                                            value="{{ old('qty_over') }}">
+                                                        @error('qty_over')
+                                                            <div class="invalid-feedback">
+                                                                {{ $message }}
+                                                            </div>
+                                                        @enderror
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <div class="form-group">
+                                                            <label>Status</label>
+                                                            <select name="kondisi[]" class=" form-control @error('kondisi') is-invalid @enderror">
+                                                                <option disabled selected>--Pilih kondisi prodak--</option>
+                                                                <option value="bagus" {{ $product->kondisi == 'bagus' ? 'selected' : '' }}>Bagus</option>
+                                                                <option value="rusak" {{ $product->kondisi == 'rusak' ? 'selected' : '' }}>Rusak</option>
+                                                                <option value="expired" {{ $product->kondisi == 'expired' ? 'selected' : '' }}>Expired</option>
+                                                            </select>
+                                                            @error('kondisi')
+                                                                <div class="invalid-feedback">
+                                                                    {{ $message }}
+                                                                </div>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </table>
+                                       
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer bg-whitesmoke br">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary">Update</button>
+                            <button type="reset" class="btn btn-danger">
+                                <i class="fa fa-redo mr-1"></i>Reset
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-paper-plane mr-1"></i>Simpan
+                            </button>
                         </div>
-                    </form>
+                     </form>
                 </div>
             </div>
+            @push('select-edit-script')
+                <script type="text/javascript">
+                    $('#listEditProducts{!! $product->id !!}').select2({
+                        ajax: {
+                            url: 'http://127.0.0.1:8000/admin-gudang/ajax/products/search',
+                            processResults: function(data) {
+                                return {
+                                    results: data.map(function(item) {
+                                        return {
+                                            id: item.id,
+                                            text: item.no_po + ' ' + item.nama_barang
+                                        }
+                                    })
+                                }
+                            }
+                        }
+                    });
+                    var products = {!! $product->products !!}
+
+                    products.forEach(function(item) {
+
+                        var option = new Option(item.no_po + ' ' + item.nama_barang, item.id, true, true);
+                        $('#listEditProducts{!! $product->id !!}').append(option).trigger('change');
+
+                    });
+                </script>
+            @endpush
         </div>
     @endforeach
+    
 
     {{-- modal view --}}
-    @foreach ($overProducts as $product)
-        <div class="modal fade" id="modalView{{ $product->id }}" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+    @foreach ($overProducts as $item)
+        <div class="modal fade" id="modalView{{ $item->id }}" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="z-index: 99;">
@@ -465,63 +503,63 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <section class="section">
-                            <div class="section-body">
-                                <div class="invoice">
-                                <div class="invoice-print">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="invoice-title">
-                                                <h2>Purchase Order</h2>
-                                                <div class=" text-right h6">{{ $product->no_po }}</div>
-                                            </div>
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <address>
-                                                        <strong>Nama Produk</strong><br>
-                                                            {{ $product->nama_barang }}<br>
-                                                    </address>
-                                                    <address>
-                                                        <strong>Satuan</strong><br>
-                                                            {{ $product->satuan }}<br>
-                                                    </address>
-                                                    <address>
-                                                        <strong>Quantity</strong><br>
-                                                            {{ $product->qty }}<br>
-                                                    </address>
-                                                    <address>
-                                                        <strong>Status</strong><br>
-                                                            {{ $product->status }}<br>
-                                                    </address>
-                                                </div>
-                                                <div class="col-md-6 text-md-left">
-                                                    <address>
-                                                        <strong>Tanggal Produksi</strong><br>
-                                                            {{ $product->tgl_produksi }}<br>
-                                                    </address>
-                                                    <address>
-                                                        <strong>Tanggal Export</strong><br>
-                                                            {{ $product->tgl_export }}<br>
-                                                    </address>
-                                                    <address>
-                                                        <strong>Export Country</strong><br>
-                                                            {{ $product->export_country }}<br>
-                                                    </address>
-                                                    <address>
-                                                        <strong>Expired</strong><br>
-                                                            {{ $product->expired }}<br>
-                                                    </address>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-md-right">
-                                    <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
+                        <div class="table-responsive">
+                            <div class="alert alert-info alert-dismissible show fade mt-4">
+                                <div class="alert-body">
+                                    <button class="close" data-dismiss="alert">
+                                        <span>&times;</span>
+                                    </button>
+                                    Detail barang lebih
                                 </div>
                             </div>
-                        </section>
+                            <table class="table table-hover table-bordered table-md">
+                                <tr class=" table-active">
+                                    <th>No</th>
+                                    <th>No PO</th>
+                                    <th>Nama Barang</th>
+                                    <th>Kondisi Barang</th>
+                                    <th>Export Country</th>
+                                    <th>Tgl Export</th>
+                                </tr>
+                                @foreach ($item->products as $index => $data)
+                                    <tr>
+                                        <td>{{ $index +1 }}</td>
+                                        <td>{{ $data->no_po }}</td>
+                                        <td>{{ $data->nama_barang }}</td>
+                                        <td>
+                                            @if ($item->kondisi == 'bagus')
+                                                <div class="badge badge-success">{{ $item->kondisi }}</div>
+                                            @elseif($item->kondisi == 'rusak')
+                                                <div class="badge badge-danger">{{ $item->kondisi }}</div>
+                                            @else
+                                                <div class="badge badge-primary">{{ $item->kondisi }}</div>
+                                            @endif
+                                            {{-- <select name="kondisi[]" class=" form-control @error('kondisi') is-invalid @enderror">
+                                                <option disabled selected>--Pilih kondisi prodak--</option>
+                                                <option value="bagus" {{ $data->pivot->kondisi == 'bagus' ? 'selected' : '' }}>Bagus</option>
+                                                <option value="rusak" {{ $data->pivot->kondisi == 'rusak' ? 'selected' : '' }}>Rusak</option>
+                                                <option value="expired" {{ $data->pivot->kondisi == 'expired' ? 'selected' : '' }}>Expired</option>
+                                            </select> --}}
+                                        </td>
+                                        <td>
+                                            {{ $data->export_country }}
+                                        </td>
+                                        <td>
+                                            {{ $data->tgl_export }}
+                                        </td>
+                                        
+                                        {{-- <td>
+                                            <a href="{{ $data->pivot->id }}" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#subModal{{ $data->pivot->id }}">
+                                                <i class="fa fa-pencil-alt"></i>
+                                            </a>
+                                        </td> --}}
+                                    </tr>
+                                    @endforeach
+                                </table>
+                                <tr>
+                                    <td><span><b>jumlah barang lebih {{ $item->qty_over }} Karton</b></span></td>
+                                </tr>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -588,5 +626,28 @@
                 }
             })
         }
+
     </script>
 @endpush
+
+@push('select-script')
+    {{-- script slect2 --}}
+    <script type="text/javascript">
+        $('#listProducts').select2({
+            ajax: {
+                url: 'http://127.0.0.1:8000/admin-gudang/ajax/products/search',
+                processResults: function(data) {
+                    return {
+                        results: data.map(function(item) {
+                            return {
+                                id: item.id,
+                                text: item.no_po + ' ' + item.nama_barang
+                            }
+                        })
+                    }
+                }
+            }
+        });
+    </script>
+@endpush
+

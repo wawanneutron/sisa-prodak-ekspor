@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminGudang\AprovalController;
 use App\Http\Controllers\AdminGudang\DashboardController;
 use App\Http\Controllers\AdminGudang\OverProductController;
 use App\Http\Controllers\AdminGudang\PengajuanController;
@@ -22,8 +23,10 @@ Route::prefix('admin-gudang')
         Route::resource('/data-products', ProductController::class, ['as' => 'dashboard']);
         Route::resource('/over-products', OverProductController::class, ['as' => 'dashboard']);
 
-        Route::get('/pengajuan', [PengajuanController::class, 'index'])
-            ->name('admin-pengajuan');
+        Route::resource('/pengajuan', AprovalController::class, ['as' => 'dashboard']);
+
+        Route::get('/ajax/products/search', [ProductController::class, 'ajaxSearch']);
+        Route::get('/ajax/over-products/search', [OverProductController::class, 'ajaxSearchOver']);
     });
 
 /* supervisor */

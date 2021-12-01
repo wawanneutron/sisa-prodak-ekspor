@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePivotOverProducts extends Migration
+class CreateOverProductProduct extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,18 @@ class CreatePivotOverProducts extends Migration
      */
     public function up()
     {
-        Schema::create('pivot_over_products', function (Blueprint $table) {
+        Schema::create('over_product_product', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('over_product_id');
+
+            $table->bigInteger('qty_over')->nullable();
+            $table->enum('kondisi', [
+                'bagus',
+                'rusak',
+                'expired'
+            ])->nullable();
+
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products');
@@ -31,6 +39,6 @@ class CreatePivotOverProducts extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pivot_over_products');
+        Schema::dropIfExists('over_product_product');
     }
 }

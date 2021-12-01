@@ -8,7 +8,7 @@
             <li class="nav-item {{ Request::is(['admin-gudang', 'supervisor', 'kepala-gudang']) ? 'active' : '' }}">
                 <a href="
                     @switch(auth()->user()->role)
-                                                                                     @case('Admin Gudang')
+                        @case('Admin Gudang')
                         {{ route('statistik-admin') }}
                         @break
                         @case('SPV')
@@ -78,7 +78,7 @@
                 <a class="nav-link" href="
                     @switch(auth()->user()->role)
                         @case('Admin Gudang')
-                            {{ route('admin-pengajuan') }}
+                            {{ route('dashboard.pengajuan.index') }}
                             @break
                             @case('SPV')
                                 {{ route('spv-pengajuan') }}
