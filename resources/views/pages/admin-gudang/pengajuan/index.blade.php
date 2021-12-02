@@ -91,7 +91,7 @@
                                                         <a href="{{ $product->id }}" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalView{{ $product->id }}">
                                                             <i class=" fa fa-eye"></i>
                                                         </a>
-                                                        <a href="{{ $product->id }}" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalEdit{{ $product->id }}">
+                                                        <a href="{{ $product->id }}" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalEditPengajuan{{ $product->id }}">
                                                             <i class=" fa fa-pencil-alt"></i>
                                                         </a>
                                                         <button onclick="Delete(this.id)" id="{{ $product->id }}" class="btn btn-sm btn-danger">
@@ -278,15 +278,16 @@
     </div>
 
     {{-- modal edit --}}
-    @foreach ($aprovalProducts as $product)
-        <div class="modal fade" id="modalEdit{{ $product->id }}"  data-backdrop="static" data-keyboard="false" aria-hidden="true" role="dialog">
-            <div class="modal-dialog modal-xl">
+    @foreach ($aprovalProducts as $pengajuan)
+        <div class="modal fade" role="dialog" id="modalEditPengajuan{{ $pengajuan->id }}" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+            <div div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                    <form action="{{ route('dashboard.over-products.update', $product->id) }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('dashboard.pengajuan.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
-                        @method('put')
                         <div class="modal-header">
-                            <h5 class="modal-title">Edit Barang Lebih</h5>
+                            <h5 class="modal-title">Edit Form Pengajuan Barang Lebih <br>
+                                {{ $pengajuan->kd_pengajuan }}
+                            </h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -294,43 +295,12 @@
                         <div class="modal-body">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Jumlah Barang Lebih</label>
-                                            <input type="number" name="qty_over"
-                                                class="form-control @error('qty_over') is-invalid @enderror"
-                                                value="{{ old('qty_over') ?? $product->qty_over }}">
-                                            @error('qty_over')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <div class="form-group">
-                                                <label>Status</label>
-                                                <select name="kondisi" class=" form-control @error('kondisi') is-invalid @enderror">
-                                                    <option disabled selected>--Pilih kondisi prodak--</option>
-                                                    <option value="bagus" {{ $product->kondisi == 'bagus' ? 'selected' : '' }}>Bagus</option>
-                                                    <option value="rusak" {{ $product->kondisi == 'rusak' ? 'selected' : '' }}>Rusak</option>
-                                                    <option value="expired" {{ $product->kondisi == 'expired' ? 'selected' : '' }}>Expired</option>
-                                                </select>
-                                                @error('kondisi')
-                                                    <div class="invalid-feedback">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>Pilih Product</label>
-                                                <select name="listEditPengajuan[]" class="select2 form-control  @error('listEditPengajuan') is-invalid @enderror" multiple id="listEditPengajuan{{ $product->id }}">
+                                            <label>Pilih Barang Lebih</label>
+                                                <select name="editApprovals[]" class="select2 form-control  @error('editApprovals') is-invalid @enderror" multiple id="editApprovals{{ $pengajuan->id }}">
                                             </select>
-                                            @error('listEditPengajuan')
+                                            @error('editApprovals')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
@@ -339,75 +309,15 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>Catatan</label>
-                                            <textarea name="note" id="note" class="form-control @error('note') is-invalid @enderror"  style="height: 100px !important;">{{ $product->note }}</textarea>
-                                            @error('note')
+                                            <label>Tambahkan Catatan</label>
+                                            <textarea name="catatan" id="note" class="form-control @error('catatan') is-invalid @enderror" placeholder="catatan:" style="height: 150px !important;">{{ $pengajuan->catatan }}</textarea>
+                                            @error('catatan')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                     </div>
-                                </div>
-                                 <div class="table-responsive">
-                                    <div class="alert alert-info alert-dismissible show fade mt-4">
-                                        <div class="alert-body">
-                                            <button class="close" data-dismiss="alert">
-                                                <span>&times;</span>
-                                            </button>
-                                            Detail barang lebih
-                                        </div>
-                                    </div>
-                                    <table class="table table-hover table-bordered table-md">
-                                        <tr class=" table-active">
-                                            <th>No</th>
-                                            <th>ID</th>
-                                            <th>No PO</th>
-                                            <th>Nama Barang</th>
-                                            <th>Quantity</th>
-                                            <th>Kondisi Barang</th>
-                                        </tr>
-                                        @foreach ($product->overProducts as $index => $data)
-                                            <tr>
-                                                <td>{{ $index +1 }}</td>
-                                                <td>{{ $data->pivot->id }}</td>
-                                                <td>{{ $data->no_po }}</td>
-                                                <td>{{ $data->nama_barang }}</td>
-                                                <td>
-                                                    <div class="form-group">
-                                                        <label>Jumlah Barang Lebih</label>
-                                                        <input type="number" name="qty_over[]"
-                                                            class="form-control @error('qty_over') is-invalid @enderror"
-                                                            value="{{ old('qty_over') }}">
-                                                        @error('qty_over')
-                                                            <div class="invalid-feedback">
-                                                                {{ $message }}
-                                                            </div>
-                                                        @enderror
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-group">
-                                                        <div class="form-group">
-                                                            <label>Status</label>
-                                                            <select name="kondisi[]" class=" form-control @error('kondisi') is-invalid @enderror">
-                                                                <option disabled selected>--Pilih kondisi prodak--</option>
-                                                                <option value="bagus" {{ $product->kondisi == 'bagus' ? 'selected' : '' }}>Bagus</option>
-                                                                <option value="rusak" {{ $product->kondisi == 'rusak' ? 'selected' : '' }}>Rusak</option>
-                                                                <option value="expired" {{ $product->kondisi == 'expired' ? 'selected' : '' }}>Expired</option>
-                                                            </select>
-                                                            @error('kondisi')
-                                                                <div class="invalid-feedback">
-                                                                    {{ $message }}
-                                                                </div>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </table>
-                                       
                                 </div>
                             </div>
                         </div>
@@ -420,37 +330,37 @@
                                 <i class="fa fa-paper-plane mr-1"></i>Simpan
                             </button>
                         </div>
-                     </form>
+                    </form>
                 </div>
             </div>
-            @push('select-edit-script')
-                <script type="text/javascript">
-                    $('#listEditPengajuan{!! $product->id !!}').select2({
-                        ajax: {
-                            url: 'http://127.0.0.1:8000/admin-gudang/ajax/over-products/search',
-                            processResults: function(data) {
-                                return {
-                                    results: data.map(function(item) {
-                                        return {
-                                            id: item.id,
-                                            text: item.over_product_id
-                                        }
-                                    })
-                                }
+        </div>
+        @push('select-edit-script')
+            <script type="text/javascript">
+                $('#editApprovals{!! $pengajuan->id !!}').select2({
+                    ajax: {
+                        url: 'http://127.0.0.1:8000/admin-gudang/ajax/over-products/search',
+                        processResults: function(data) {
+                            return {
+                                results: data.map(function(item) {
+                                    return {
+                                        id: item.id,
+                                        text: item.over_product_id
+                                    }
+                                })
                             }
                         }
-                    });
-                    var products = {!! $product->overProducts !!}
+                    }
+                });
+                var aprovals = {!! $pengajuan->overProducts !!}
 
-                    products.forEach(function(item) {
+                aprovals.forEach(function(item) {
 
-                        var option = new Option(item.over_product_id, item.id, true, true);
-                        $('#listEditPengajuan{!! $product->id !!}').append(option).trigger('change');
+                    var option = new Option(item.over_product_id, item.id, true, true);
+                    $('#editApprovals{!! $pengajuan->id !!}').append(option).trigger('change');
 
-                    });
-                </script>
-            @endpush
-        </div>
+                });
+            </script>
+        @endpush
     @endforeach
     
 
