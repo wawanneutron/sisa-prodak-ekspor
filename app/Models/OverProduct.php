@@ -17,8 +17,8 @@ class OverProduct extends Model
         return $this->belongsToMany(Product::class)->withPivot('id', 'qty_over', 'kondisi');
     }
 
-    public function aprovals()
-    {
-        return $this->belongsToMany(Product::class);
-    }
+    // public function aprovals()
+    // {
+    //     return $this->belongsToMany(Aproval::class);
+    // }
 }

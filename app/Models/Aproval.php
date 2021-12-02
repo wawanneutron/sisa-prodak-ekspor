@@ -15,6 +15,6 @@ class Aproval extends Model
 
     public function overProducts()
     {
-        return $this->belongsToMany(OverProduct::class);
+        return $this->belongsToMany(OverProduct::class)->withPivot('id');
     }
 }

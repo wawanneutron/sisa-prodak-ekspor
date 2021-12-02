@@ -460,6 +460,7 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
+                        <div class="h5">Kode Pengajuan <b>{{ $item->kd_pengajuan }}</b></div>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="z-index: 99;">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -477,24 +478,24 @@
                             <table class="table table-hover table-bordered table-md">
                                 <tr class=" table-active">
                                     <th>No</th>
-                                    <th>No PO</th>
-                                    <th>Nama Barang</th>
+                                    <th>Kode Barang Lebih</th>
+                                    <th>Qty Barang Lebih</th>
                                     <th>Kondisi Barang</th>
-                                    <th>Export Country</th>
-                                    <th>Tgl Export</th>
+                                    <th>Note</th>
+                                    <th>Detail</th>
                                 </tr>
                                 @foreach ($item->overProducts as $index => $data)
                                     <tr>
                                         <td>{{ $index +1 }}</td>
-                                        <td>{{ $data->no_po }}</td>
-                                        <td>{{ $data->nama_barang }}</td>
+                                        <td>{{ $data->over_product_id }}</td>
+                                        <td>{{ $data->qty_over }}</td>
                                         <td>
-                                            @if ($item->kondisi == 'bagus')
-                                                <div class="badge badge-success">{{ $item->kondisi }}</div>
-                                            @elseif($item->kondisi == 'rusak')
-                                                <div class="badge badge-danger">{{ $item->kondisi }}</div>
+                                            @if ($data->kondisi == 'bagus')
+                                                <div class="badge badge-success">{{ $data->kondisi }}</div>
+                                            @elseif($data->kondisi == 'rusak')
+                                                <div class="badge badge-danger">{{ $data->kondisi }}</div>
                                             @else
-                                                <div class="badge badge-primary">{{ $item->kondisi }}</div>
+                                                <div class="badge badge-primary">{{ $data->kondisi }}</div>
                                             @endif
                                             {{-- <select name="kondisi[]" class=" form-control @error('kondisi') is-invalid @enderror">
                                                 <option disabled selected>--Pilih kondisi prodak--</option>
@@ -504,31 +505,69 @@
                                             </select> --}}
                                         </td>
                                         <td>
-                                            {{ $data->export_country }}
+                                            {{ $data->note }}
                                         </td>
                                         <td>
-                                            {{ $data->tgl_export }}
-                                        </td>
-                                        
-                                        {{-- <td>
-                                            <a href="{{ $data->pivot->id }}" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#subModal{{ $data->pivot->id }}">
-                                                <i class="fa fa-pencil-alt"></i>
+                                            <a href="{{ $data->pivot->id }}" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#subView{{ $data->pivot->id }}">
+                                                <i class="fa fa-eye"></i>
                                             </a>
-                                        </td> --}}
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </table>
-                                <tr>
-                                    <td><span><b>jumlah barang lebih {{ $item->qty_over }} Karton</b></span></td>
-                                </tr>
+                                <span><b>jumlah barang lebih {{ $item->overProducts->sum('qty_over') }} Karton</b></span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        {{-- modal sub view --}}
+        @foreach ($item->overProducts as $index => $data)
+            <div class="modal fade" id="subView{{ $data->pivot->id }}" tabindex="-1"  aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header bg-warning">
+                             <div class="h5 text-light">List Barang Lebih <b>{{ $data->over_product_id }}</b></div>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="z-index: 99;">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-bordered table-md">
+                                    <tr class=" table-active">
+                                        <th>No</th>
+                                        <th>No PO</th>
+                                        <th>Nama Barang</th>
+                                        <th>Expired</th>
+                                        <th>Tgl Produksi</th>
+                                        <th>Export Country</th>
+                                        <th>Tgl Export</th>
+                                    </tr>
+                                    @foreach ($data->products as $index => $product)
+                                        <tr>
+                                            <td>{{ $index +1 }}</td>
+                                            <td>{{ $product->no_po }}</td>
+                                            <td>{{ $product->nama_barang }}</td>
+                                            <td>{{ $product->expired }}</td>
+                                            <td>{{ $product->tgl_produksi }}</td>
+                                            <td>{{ $product->export_country }}</td>
+                                            <td>{{ $product->tgl_export }}</td>
+                                        </tr>
+                                    @endforeach
+                                </table>
+                                {{-- <td><span><b>jumlah barang lebih {{ $item->qty_over }} Karton</b></span></td> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
     @endforeach
     
 @endsection
+
+
 
 @push('addon-script')
     <script>
