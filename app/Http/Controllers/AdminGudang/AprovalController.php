@@ -4,10 +4,8 @@ namespace App\Http\Controllers\AdminGudang;
 
 use App\Http\Controllers\Controller;
 use App\Models\Aproval;
-use App\Models\OverProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
 
 class AprovalController extends Controller
 {
@@ -18,8 +16,9 @@ class AprovalController extends Controller
      */
     public function index()
     {
-        $approvalOverProducts = Aproval::paginate(10);
+        $approvalOverProducts = Aproval::with('overProduct')->paginate(10);
 
+        // dd($approvalOverProducts);
         return view('pages.admin-gudang.pengajuan.index', [
             'aprovalProducts' => $approvalOverProducts
         ]);
@@ -59,13 +58,15 @@ class AprovalController extends Controller
 
         $approvalOverProducts = Aproval::create([
             'users_id'          => auth()->user()->id,
+            'over_product_id'   => $request->approvals,
             'kd_pengajuan'      => $aprvCode,
             'kondisi'           => 'not checked',
             'catatan'           => $request->catatan
         ]);
-
-        $approvalOverProducts->overProducts()->attach($request->get('approvals'));
-
+        /*
+            many to many (use pivot tale)
+            $approvalOverProducts->overProducts()->attach($request->get('approvals'));
+         */
 
         if ($approvalOverProducts) {
             return redirect()->route('dashboard.pengajuan.index')
@@ -107,7 +108,27 @@ class AprovalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'editApprovals' => 'required',
+            'catatan' => 'required'
+        ]);
+        $aprovals = Aproval::find($id);
+
+        $aprovals->update([
+            'catatan'     => $request->catatan,
+        ]);
+
+
+        $aprovals->overProducts()->sync($request->get('editApprovals'));
+
+
+        if ($aprovals) {
+            return redirect()->route('dashboard.pengajuan.index')
+                ->with(['success' => 'Data Berhasil Disimpan']);
+        } else {
+            return redirect()->route('dashboard.pengajuan.index')
+                ->with(['error' => 'Data Gagal Disimpan']);
+        }
     }
 
     /**
@@ -118,6 +139,18 @@ class AprovalController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $aprovals = Aproval::find($id);
+        // $aprovals->overProducts()->detach();
+        $aprovals->delete();
+
+        if ($aprovals) {
+            return response()->json([
+                'status' => 'success',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+            ]);
+        }
     }
 }

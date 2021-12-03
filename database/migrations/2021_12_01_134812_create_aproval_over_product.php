@@ -13,17 +13,17 @@ class CreateAprovalOverProduct extends Migration
      */
     public function up()
     {
-        Schema::create('aproval_over_product', function (Blueprint $table) {
-            $table->id();
+        // Schema::create('aproval_over_product', function (Blueprint $table) {
+        //     $table->id();
 
-            $table->unsignedBigInteger('over_product_id');
-            $table->unsignedBigInteger('aproval_id');
+        //     $table->unsignedBigInteger('over_product_id');
+        //     $table->unsignedBigInteger('aproval_id');
 
-            $table->foreign('over_product_id')->references('id')->on('over_products');
-            $table->foreign('aproval_id')->references('id')->on('aprovals');
+        //     $table->foreign('over_product_id')->references('id')->on('over_products')->onDelete('cascade');;
+        //     $table->foreign('aproval_id')->references('id')->on('aprovals')->onDelete('cascade');;
 
-            $table->timestamps();
-        });
+        //     $table->timestamps();
+        // });
     }
 
     /**
@@ -33,6 +33,6 @@ class CreateAprovalOverProduct extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('aproval_over_product');
+        // Schema::dropIfExists('aproval_over_product');
     }
 }

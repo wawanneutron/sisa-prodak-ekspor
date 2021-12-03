@@ -367,7 +367,7 @@
                                             <label>Pilih Product</label>
                                                 <select name="listEditProducts[]" class="select2 form-control  @error('listEditProducts') is-invalid @enderror" multiple id="listEditProducts{{ $product->id }}">
                                             </select>
-                                            @error('listProducts')
+                                            @error('listEditProducts')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
@@ -411,7 +411,7 @@
                                                 <td>{{ $data->no_po }}</td>
                                                 <td>{{ $data->nama_barang }}</td>
                                                 <td>
-                                                    <div class="form-group">
+                                                    {{-- <div class="form-group">
                                                         <label>Jumlah Barang Lebih</label>
                                                         <input type="hidden" name="pivot_over[]" value="{{ $data->pivot->id }}">
                                                         <input type="number" name="qty_over[]"
@@ -422,10 +422,10 @@
                                                                 {{ $message }}
                                                             </div>
                                                         @enderror
-                                                    </div>
+                                                    </div> --}}
                                                 </td>
                                                 <td>
-                                                    <div class="form-group">
+                                                    {{-- <div class="form-group">
                                                         <div class="form-group">
                                                             <label>Status</label>
                                                             <select name="kondisi[]" class=" form-control @error('kondisi') is-invalid @enderror">
@@ -440,7 +440,7 @@
                                                                 </div>
                                                             @enderror
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -587,7 +587,7 @@
                 if (isConfirm) {
                     //ajax delete
                     jQuery.ajax({
-                        url: "{{ route('dashboard.data-products.index') }}/" + id,
+                        url: "{{ route('dashboard.over-products.index') }}/" + id,
                         data: {
                             "id": id,
                             "_token": token

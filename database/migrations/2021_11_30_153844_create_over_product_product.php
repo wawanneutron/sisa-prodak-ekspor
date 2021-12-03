@@ -27,8 +27,8 @@ class CreateOverProductProduct extends Migration
 
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('products');
-            $table->foreign('over_product_id')->references('id')->on('over_products');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');;
+            $table->foreign('over_product_id')->references('id')->on('over_products')->onDelete('cascade');;
         });
     }
 

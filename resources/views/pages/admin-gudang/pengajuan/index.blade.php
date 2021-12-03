@@ -223,7 +223,7 @@
     </div>
 
     {{-- modal tambah --}}
-    <div class="modal fade" tabindex="-1" role="dialog" id="modalTambah" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+    <div class="modal fade"  role="dialog" id="modalTambah" data-backdrop="static" data-keyboard="false" aria-hidden="true">
         <div div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <form action="{{ route('dashboard.pengajuan.store') }}" method="post" enctype="multipart/form-data">
@@ -240,7 +240,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Pilih Barang Lebih</label>
-                                            <select name="approvals[]" class="select2 form-control  @error('approvals') is-invalid @enderror" multiple id="approvals">
+                                            <select name="approvals" class="form-control select2  @error('approvals') is-invalid @enderror" id="approvals">
                                         </select>
                                         @error('approvals')
                                             <div class="invalid-feedback">
@@ -282,8 +282,9 @@
         <div class="modal fade" role="dialog" id="modalEditPengajuan{{ $pengajuan->id }}" data-backdrop="static" data-keyboard="false" aria-hidden="true">
             <div div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                    <form action="{{ route('dashboard.pengajuan.store') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('dashboard.pengajuan.update', $pengajuan->id) }}" method="post" enctype="multipart/form-data">
                         @csrf
+                        @method('put')
                         <div class="modal-header">
                             <h5 class="modal-title">Edit Form Pengajuan Barang Lebih <br>
                                 {{ $pengajuan->kd_pengajuan }}
@@ -344,7 +345,7 @@
                                 results: data.map(function(item) {
                                     return {
                                         id: item.id,
-                                        text: item.over_product_id
+                                        text: item.over_product_id + ' - ' + item.kondisi
                                     }
                                 })
                             }
@@ -355,7 +356,7 @@
 
                 aprovals.forEach(function(item) {
 
-                    var option = new Option(item.over_product_id, item.id, true, true);
+                    var option = new Option(item.over_product_id + ' - ' + item.kondisi, item.id, true, true);
                     $('#editApprovals{!! $pengajuan->id !!}').append(option).trigger('change');
 
                 });
@@ -363,117 +364,130 @@
         @endpush
     @endforeach
     
-
      {{-- modal view --}}
-    @foreach ($aprovalProducts as $item)
-        <div class="modal fade" id="modalView{{ $item->id }}" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+    @foreach ($aprovalProducts as $data)
+        <div class="modal fade" id="modalView{{ $data->id }}" data-backdrop="static" data-keyboard="false" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <div class="h5">Kode Pengajuan <b>{{ $item->kd_pengajuan }}</b></div>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="z-index: 99;">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="table-responsive">
-                            <div class="alert alert-info alert-dismissible show fade mt-4">
-                                <div class="alert-body">
-                                    <button class="close" data-dismiss="alert">
-                                        <span>&times;</span>
-                                    </button>
-                                    Detail barang lebih
+                        {{-- view detail pengajuian --}}
+                        <section class="section">
+                            <div class="section-body">
+                                <div class="invoice" style="margin-bottom: 0px !important; padding-bottom: 10px !important;">
+                                <div class="invoice-print">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="invoice-title">
+                                                <h2>Detail Pengajuan</h2>
+                                                <div class=" text-black-50 h5">Barang Sisa Ekspor</div>
+                                            </div>
+                                            <div class="row mt-5">
+                                                <div class="col-md-6">
+                                                    <address>
+                                                        <strong>Kode Pengajuan</strong><br>
+                                                            {{ $data->kd_pengajuan }}<br><br>
+                                                    </address>
+                                                    <address>
+                                                        <strong>Qty Barang Lebih</strong><br>
+                                                            {{ !empty($data->overProduct->qty_over) ? $data->overProduct->qty_over : '' }}<br><br>
+                                                    </address>
+                                                    <address>
+                                                        <strong>Status Pengajuan</strong><br><br>
+                                                        @if ($data->kondisi == 'approved')
+                                                            <div class="btn btn-success">{{ $data->kondisi }}</div>
+                                                        @elseif($data->kondisi == 'not checked')
+                                                            <div class="btn btn-danger">{{ $data->kondisi }}</div>
+                                                        @elseif($data->kondisi == 'pending')
+                                                            <div class="btn btn-primary">{{ $data->kondisi }}</div>
+                                                        @else
+                                                            <div class="btn btn-secondary">{{ $data->kondisi }}</div>
+                                                        @endif
+                                                        <br><br>
+                                                    </address>
+                                                </div>
+                                                <div class="col-md-6 text-md-left">
+                                                    <address>
+                                                        <strong>Kode Barang Lebih</strong><br>
+                                                            {{ !empty($data->overProduct->over_product_id) ? $data->overProduct->over_product_id : '' }}<br><br>
+                                                    </address>
+                                                    <address>
+                                                        <strong>Note</strong><br>
+                                                            {{ !empty($data->overProduct->note) ? $data->overProduct->note : '' }}<br><br>
+                                                    </address>
+                                                    <address>
+                                                        <strong>Tanggal Pengajuan</strong><br>
+                                                            {{ $data->created_at }}<br><br>
+                                                    </address>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                {{-- print --}}
                             </div>
+                        </section>
+                        {{-- tabel product barang lebih --}}
+                        <div class=" text-body text-bold mb-2" style="font-size: 18px">Tabel Detail Barang Lebih</div>
+                        <div class="table-responsive">
                             <table class="table table-hover table-bordered table-md">
                                 <tr class=" table-active">
                                     <th>No</th>
-                                    <th>Kode Barang Lebih</th>
-                                    <th>Qty Barang Lebih</th>
-                                    <th>Kondisi Barang</th>
-                                    <th>Note</th>
-                                    <th>Detail</th>
+                                    <th>No PO</th>
+                                    <th>Nama Barang</th>
+                                    <th>Negara Ekspor</th>
+                                    <th>Satuan</th>
+                                    <th>Tanggal Ekspor</th>
                                 </tr>
-                                @foreach ($item->overProducts as $index => $data)
-                                    <tr>
-                                        <td>{{ $index +1 }}</td>
-                                        <td>{{ $data->over_product_id }}</td>
-                                        <td>{{ $data->qty_over }}</td>
-                                        <td>
-                                            @if ($data->kondisi == 'bagus')
-                                                <div class="badge badge-success">{{ $data->kondisi }}</div>
-                                            @elseif($data->kondisi == 'rusak')
-                                                <div class="badge badge-danger">{{ $data->kondisi }}</div>
-                                            @else
-                                                <div class="badge badge-primary">{{ $data->kondisi }}</div>
-                                            @endif
-                                            {{-- <select name="kondisi[]" class=" form-control @error('kondisi') is-invalid @enderror">
-                                                <option disabled selected>--Pilih kondisi prodak--</option>
-                                                <option value="bagus" {{ $data->pivot->kondisi == 'bagus' ? 'selected' : '' }}>Bagus</option>
-                                                <option value="rusak" {{ $data->pivot->kondisi == 'rusak' ? 'selected' : '' }}>Rusak</option>
-                                                <option value="expired" {{ $data->pivot->kondisi == 'expired' ? 'selected' : '' }}>Expired</option>
-                                            </select> --}}
-                                        </td>
-                                        <td>
-                                            {{ $data->note }}
-                                        </td>
-                                        <td>
-                                            <a href="{{ $data->pivot->id }}" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#subView{{ $data->pivot->id }}">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </table>
-                                <span><b>jumlah barang lebih {{ $item->overProducts->sum('qty_over') }} Karton</b></span>
+                                @if (!empty($data->overProduct->products))
+                                    
+                                    @forelse ($data->overProduct->products as $index => $productOver)
+                                        <tr>
+                                            <td>{{ $index +1 }}</td>
+                                            <td>{{ $productOver->no_po }}</td>
+                                            <td>{{ $productOver->nama_barang }}</td>
+                                            <td>{{ $productOver->export_country }}</td>
+                                            <td>{{ $productOver->satuan }}</td>
+                                            <td>{{ $productOver->tgl_export }}</td>
+                                        </tr>
+                                    @empty
+                                        <div class="alert alert-warning alert-dismissible show fade">
+                                            <div class="alert-body">
+                                                <button class="close" data-dismiss="alert">
+                                                    <span>&times;</span>
+                                                </button>
+                                                Tidak ada barang sisa exspor!, karena barang di <b>menu prodak</b> telah dihapus!
+                                            </div>
+                                        </div>
+                                    @endforelse
+                                @else
+                                    <div class="alert alert-danger alert-dismissible show fade">
+                                        <div class="alert-body">
+                                            <button class="close" data-dismiss="alert">
+                                                <span>&times;</span>
+                                            </button>
+                                            Tidak ada barang sisa exspor!, karena <b>data barang lebih</b> telah dihapus!
+                                        </div>
+                                    </div>
+                                @endif
+                            </table>
+                                {{-- <span><b>jumlah barang lebih {{ $item->overProducts->sum('qty_over') }} Karton</b></span> --}}
+                        </div>
+                        <div class="text-md-right mt-4">
+                            <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        {{-- modal sub view --}}
-        @foreach ($item->overProducts as $index => $data)
-            <div class="modal fade" id="subView{{ $data->pivot->id }}" tabindex="-1"  aria-hidden="true">
-                <div class="modal-dialog modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header bg-warning">
-                             <div class="h5 text-light">List Barang Lebih <b>{{ $data->over_product_id }}</b></div>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="z-index: 99;">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover table-bordered table-md">
-                                    <tr class=" table-active">
-                                        <th>No</th>
-                                        <th>No PO</th>
-                                        <th>Nama Barang</th>
-                                        <th>Expired</th>
-                                        <th>Tgl Produksi</th>
-                                        <th>Export Country</th>
-                                        <th>Tgl Export</th>
-                                    </tr>
-                                    @foreach ($data->products as $index => $product)
-                                        <tr>
-                                            <td>{{ $index +1 }}</td>
-                                            <td>{{ $product->no_po }}</td>
-                                            <td>{{ $product->nama_barang }}</td>
-                                            <td>{{ $product->expired }}</td>
-                                            <td>{{ $product->tgl_produksi }}</td>
-                                            <td>{{ $product->export_country }}</td>
-                                            <td>{{ $product->tgl_export }}</td>
-                                        </tr>
-                                    @endforeach
-                                </table>
-                                {{-- <td><span><b>jumlah barang lebih {{ $item->qty_over }} Karton</b></span></td> --}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endforeach
+        
     @endforeach
+
+    
     
 @endsection
 
@@ -498,7 +512,7 @@
                 if (isConfirm) {
                     //ajax delete
                     jQuery.ajax({
-                        url: "{{ route('dashboard.data-products.index') }}/" + id,
+                        url: "{{ route('dashboard.pengajuan.index') }}/" + id,
                         data: {
                             "id": id,
                             "_token": token
@@ -545,6 +559,7 @@
     {{-- script slect2 --}}
     <script type="text/javascript">
         $('#approvals').select2({
+            // dropdownParent: "#modalTambah",
             ajax: {
                 url: 'http://127.0.0.1:8000/admin-gudang/ajax/over-products/search',
                 processResults: function(data) {
@@ -552,7 +567,7 @@
                         results: data.map(function(item) {
                             return {
                                 id: item.id,
-                                text: item.over_product_id
+                                text: item.over_product_id + ' - ' + item.kondisi
                             }
                         })
                     }

@@ -108,8 +108,8 @@ class OverProductController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            // 'qty_over' => 'required',
-            // 'kondisi' => 'required',
+            'qty_over' => 'required',
+            'kondisi' => 'required',
             'listEditProducts' => 'required',
             'note' => 'required'
         ]);
@@ -118,6 +118,9 @@ class OverProductController extends Controller
 
         $overProducts->update([
             'note'     => $request->note,
+            'qty_over' => $request->qty_over,
+            'kondisi' => $request->kondisi,
+            'note' => $request->note
         ]);
 
 
@@ -141,13 +144,26 @@ class OverProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $overProducts = OverProduct::find($id);
+        $overProducts->products()->detach();
+        $overProducts->delete();
+
+        if ($overProducts) {
+            return response()->json([
+                'status' => 'success'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error'
+            ]);
+        }
     }
 
     public function ajaxSearchOver()
     {
         $overProducts = DB::table('over_products')
             ->where('over_product_id', 'like', '%' . request()->q . '%')
+            ->orWhere('kondisi', 'like', '%' . request()->q . '%')
             ->get();
 
         return $overProducts;

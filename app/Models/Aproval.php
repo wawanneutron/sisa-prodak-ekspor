@@ -10,11 +10,19 @@ class Aproval extends Model
     use HasFactory;
 
     protected $fillable = [
-        'over_product_id', 'users_id', 'kd_pengajuan', 'catatan', 'kondisi'
+        'users_id', 'over_product_id',  'kd_pengajuan', 'catatan', 'kondisi'
     ];
 
-    public function overProducts()
+    public function overProduct()
     {
-        return $this->belongsToMany(OverProduct::class)->withPivot('id');
+        return $this->belongsTo(OverProduct::class);
     }
+
+    /*
+        many to many (use pivot tale)
+        public function overProducts()
+        {
+            return $this->belongsToMany(OverProduct::class)->withPivot('id');
+        }
+    */
 }
