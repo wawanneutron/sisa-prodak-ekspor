@@ -471,7 +471,7 @@
                                     results: data.map(function(item) {
                                         return {
                                             id: item.id,
-                                            text: item.no_po + ' ' + item.nama_barang
+                                            text: item.no_po + ' - ' + item.nama_barang
                                         }
                                     })
                                 }
@@ -482,7 +482,7 @@
 
                     products.forEach(function(item) {
 
-                        var option = new Option(item.no_po + ' ' + item.nama_barang, item.id, true, true);
+                        var option = new Option(item.no_po + ' - ' + item.nama_barang, item.id, true, true);
                         $('#listEditProducts{!! $product->id !!}').append(option).trigger('change');
 
                     });
@@ -641,7 +641,7 @@
                         results: data.map(function(item) {
                             return {
                                 id: item.id,
-                                text: item.no_po + ' ' + item.nama_barang
+                                text: item.no_po + ' - ' + item.nama_barang
                             }
                         })
                     }

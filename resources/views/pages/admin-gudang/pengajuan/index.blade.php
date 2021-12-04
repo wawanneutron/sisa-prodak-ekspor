@@ -299,9 +299,9 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Pilih Barang Lebih</label>
-                                                <select name="editApprovals[]" class="select2 form-control  @error('editApprovals') is-invalid @enderror" multiple id="editApprovals{{ $pengajuan->id }}">
+                                                <select name="editAproval" class="form-control select2  @error('editAproval') is-invalid @enderror" id="editAproval{{ $pengajuan->id }}">
                                             </select>
-                                            @error('editApprovals')
+                                            @error('editAproval')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
@@ -311,7 +311,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Tambahkan Catatan</label>
-                                            <textarea name="catatan" id="note" class="form-control @error('catatan') is-invalid @enderror" placeholder="catatan:" style="height: 150px !important;">{{ $pengajuan->catatan }}</textarea>
+                                            <textarea name="catatan" id="note" class="form-control @error('note') is-invalid @enderror" placeholder="note:" style="height: 150px !important;">{{ $pengajuan->catatan }}</textarea>
                                             @error('catatan')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -337,7 +337,7 @@
         </div>
         @push('select-edit-script')
             <script type="text/javascript">
-                $('#editApprovals{!! $pengajuan->id !!}').select2({
+                $('#editAproval{!! $pengajuan->id !!}').select2({
                     ajax: {
                         url: 'http://127.0.0.1:8000/admin-gudang/ajax/over-products/search',
                         processResults: function(data) {
@@ -352,14 +352,12 @@
                         }
                     }
                 });
-                var aprovals = {!! $pengajuan->overProducts !!}
+                /* single selected data */
+                var data = {!! $pengajuan->overProduct !!}
 
-                aprovals.forEach(function(item) {
-
-                    var option = new Option(item.over_product_id + ' - ' + item.kondisi, item.id, true, true);
-                    $('#editApprovals{!! $pengajuan->id !!}').append(option).trigger('change');
-
-                });
+                var option = new Option(data.over_product_id + ' - ' + data.kondisi, true, true);
+                $('#editAproval{!! $pengajuan->id !!}').append(option).trigger('change');
+               
             </script>
         @endpush
     @endforeach

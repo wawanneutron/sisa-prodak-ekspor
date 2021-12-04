@@ -109,25 +109,24 @@ class AprovalController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'editApprovals' => 'required',
+            'editAproval' => 'required',
             'catatan' => 'required'
         ]);
         $aprovals = Aproval::find($id);
-
         $aprovals->update([
+            'over_product_id' => $request->editAproval,
             'catatan'     => $request->catatan,
         ]);
 
 
-        $aprovals->overProducts()->sync($request->get('editApprovals'));
-
+        // $aprovals->overProducts()->sync($request->get('editApprovals'));
 
         if ($aprovals) {
             return redirect()->route('dashboard.pengajuan.index')
-                ->with(['success' => 'Data Berhasil Disimpan']);
+                ->with(['success' => 'Data Berhasil Diupdate']);
         } else {
             return redirect()->route('dashboard.pengajuan.index')
-                ->with(['error' => 'Data Gagal Disimpan']);
+                ->with(['error' => 'Data Gagal Diupdate']);
         }
     }
 
