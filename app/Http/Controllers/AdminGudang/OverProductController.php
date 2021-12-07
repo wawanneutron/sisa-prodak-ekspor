@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\OverProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class OverProductController extends Controller
@@ -41,10 +42,11 @@ class OverProductController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'qty_over' => 'required',
-            'kondisi' => 'required',
+            'qty_over'     => 'required',
+            'kondisi'      => 'required',
             'listProducts' => 'required',
-            'note' => 'required'
+            'note'         => 'required',
+            'image'        => 'required|mimes:jpeg,png,jpg,gif|max:1000'
         ]);
 
         $length = 7;
@@ -56,16 +58,19 @@ class OverProductController extends Controller
         }
         $overCode = 'OVER-' . Str::upper($rand);
 
+        $image = $request->file('image');
+        $image->storeAs('public/over-products', $image->hashName()); //hash before save file
+
         $overProducts = OverProduct::create([
-            'users_id' => auth()->user()->id,
-            'over_product_id' => $overCode,
-            'qty_over' => $request->qty_over,
-            'kondisi' => $request->kondisi,
-            'note'     => $request->note
+            'users_id'          => auth()->user()->id,
+            'over_product_id'   => $overCode,
+            'qty_over'          => $request->qty_over,
+            'kondisi'           => $request->kondisi,
+            'note'              => $request->note,
+            'image'             => $image->hashName() //hash name image
         ]);
 
         $overProducts->products()->attach($request->get('listProducts'));
-
 
         if ($overProducts) {
             return redirect()->route('dashboard.over-products.index')
@@ -108,24 +113,41 @@ class OverProductController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'qty_over' => 'required',
-            'kondisi' => 'required',
-            'listEditProducts' => 'required',
-            'note' => 'required'
+            'qty_over'              => 'required',
+            'kondisi'               => 'required',
+            'listEditProducts'      => 'required',
+            'note'                  => 'required',
+            'image'                 => 'image|mimes:jpeg,png,jpg,gif|max:1000'
         ]);
 
         $overProducts = OverProduct::find($id);
 
-        $overProducts->update([
-            'note'     => $request->note,
-            'qty_over' => $request->qty_over,
-            'kondisi' => $request->kondisi,
-            'note' => $request->note
-        ]);
+        if ($request->file('image') == null) {
+            # code...
+            $overProducts->update([
+                'note'      => $request->note,
+                'qty_over'  => $request->qty_over,
+                'kondisi'   => $request->kondisi,
+                'note'      => $request->note
+            ]);
+        } else {
+            # code...
+            Storage::disk('local')
+                ->delete('public/over-products/' . $overProducts->image);
 
+            $updateImage = $request->file('image');
+            $updateImage->storeAs('public/over-products', $updateImage->hashName());
+
+            $overProducts->update([
+                'note'      => $request->note,
+                'qty_over'  => $request->qty_over,
+                'kondisi'   => $request->kondisi,
+                'note'      => $request->note,
+                'image'     => $updateImage->hashName()
+            ]);
+        }
 
         $overProducts->products()->sync($request->get('listEditProducts'));
-
 
         if ($overProducts) {
             return redirect()->route('dashboard.over-products.index')
@@ -145,6 +167,8 @@ class OverProductController extends Controller
     public function destroy($id)
     {
         $overProducts = OverProduct::find($id);
+
+        Storage::disk('local')->delete('public/over-products/' . $overProducts->image);
         $overProducts->products()->detach();
         $overProducts->delete();
 

@@ -385,41 +385,66 @@
                                                 <div class=" text-black-50 h5">Barang Sisa Ekspor</div>
                                             </div>
                                             <div class="row mt-5">
-                                                <div class="col-md-6">
+                                                <div class="col-md-3">
+                                                    <img src="{{ $data->getImage() }}" class="img-fluid" width="200" alt="photo barang lebih not found" title="photo barang lebih sisa ekspor" style=" border-radius: 8px;">
+                                                </div>
+                                                <div class="col-md-3">
                                                     <address>
                                                         <strong>Kode Pengajuan</strong><br>
                                                             {{ $data->kd_pengajuan }}<br><br>
                                                     </address>
                                                     <address>
                                                         <strong>Qty Barang Lebih</strong><br>
-                                                            {{ !empty($data->overProduct->qty_over) ? $data->overProduct->qty_over : '' }}<br><br>
+                                                            {{ !empty($data->overProduct->qty_over) ? $data->overProduct->qty_over . ' Karton'  : '' }} <br><br>
                                                     </address>
                                                     <address>
-                                                        <strong>Status Pengajuan</strong><br><br>
+                                                        <strong>Status Pengajuan</strong> <br>
                                                         @if ($data->kondisi == 'approved')
-                                                            <div class="btn btn-success">{{ $data->kondisi }}</div>
+                                                            <div class="btn btn-success mt-2">{{ $data->kondisi }}</div>
                                                         @elseif($data->kondisi == 'not checked')
-                                                            <div class="btn btn-danger">{{ $data->kondisi }}</div>
+                                                            <div class="btn btn-danger mt-2">{{ $data->kondisi }}</div>
                                                         @elseif($data->kondisi == 'pending')
-                                                            <div class="btn btn-primary">{{ $data->kondisi }}</div>
+                                                            <div class="btn btn-primary mt-2">{{ $data->kondisi }}</div>
                                                         @else
-                                                            <div class="btn btn-secondary">{{ $data->kondisi }}</div>
+                                                            <div class="btn btn-secondary mt-2">{{ $data->kondisi }}</div>
                                                         @endif
                                                         <br><br>
                                                     </address>
                                                 </div>
-                                                <div class="col-md-6 text-md-left">
+                                                <div class="col-md-3 text-md-left">
                                                     <address>
                                                         <strong>Kode Barang Lebih</strong><br>
                                                             {{ !empty($data->overProduct->over_product_id) ? $data->overProduct->over_product_id : '' }}<br><br>
                                                     </address>
                                                     <address>
-                                                        <strong>Note</strong><br>
+                                                        <strong>Catatan Barang Lebih</strong><br>
                                                             {{ !empty($data->overProduct->note) ? $data->overProduct->note : '' }}<br><br>
                                                     </address>
                                                     <address>
                                                         <strong>Tanggal Pengajuan</strong><br>
                                                             {{ $data->created_at }}<br><br>
+                                                    </address>
+                                                </div>
+                                                <div class="col-md-3 text-md-left">
+                                                    <address>
+                                                        <strong>Kondisi Barang</strong><br>
+                                                        <span class="d-none">{{ $dataItem = !empty($data->overProduct->kondisi) ? $data->overProduct->kondisi : '' }}</span>
+                                                            @switch($dataItem)
+                                                                @case('bagus')
+                                                                        <div class="badge badge-success mt-2">{{ $dataItem }}</div>
+                                                                    @break
+                                                                @case('rusak')
+                                                                        <div class="badge badge-danger mt-2">{{ $dataItem }}</div>
+                                                                    @break
+                                                                @case('expired')
+                                                                        <div class="badge badge-primary mt-2">{{ $dataItem }}</div>
+                                                                    @break
+                                                                @default
+                                                            @endswitch
+                                                    </address>
+                                                    <address>
+                                                        <strong>Catatan Pengajuan</strong><br>
+                                                            {{ $data->catatan }}<br><br>
                                                     </address>
                                                 </div>
                                             </div>

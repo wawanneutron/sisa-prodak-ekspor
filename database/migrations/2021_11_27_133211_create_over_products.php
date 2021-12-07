@@ -24,6 +24,7 @@ class CreateOverProducts extends Migration
                 'expired'
             ]);
             $table->text('note');
+            $table->string('image');
             $table->timestamps();
         });
     }

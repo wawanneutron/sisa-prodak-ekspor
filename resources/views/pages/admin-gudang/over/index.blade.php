@@ -288,6 +288,18 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                        <label>Photo Barang Lebih</label>
+                                            <input type="file" name="image" class="form-control  @error('image') is-invalid @enderror">
+                                        </input>
+                                        @error('image')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
                                         <label>Catatan</label>
                                         <textarea name="note" id="note" class="form-control @error('note') is-invalid @enderror" placeholder="note:" style="height: 100px !important;"></textarea>
                                         @error('note')
@@ -368,6 +380,19 @@
                                                 <select name="listEditProducts[]" class="select2 form-control  @error('listEditProducts') is-invalid @enderror" multiple id="listEditProducts{{ $product->id }}">
                                             </select>
                                             @error('listEditProducts')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Photo Barang Lebih</label><br>
+                                                <img src="{{ Storage::url('over-products/' . $product->image) }}" width="70" alt="photo barang lebih" title="photo barang lebih">
+                                                <input type="file" name="image" class="mt-2 form-control  @error('image') is-invalid @enderror">
+                                            </input>
+                                            @error('image')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
@@ -503,15 +528,18 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="table-responsive">
-                            <div class="alert alert-info alert-dismissible show fade mt-4">
-                                <div class="alert-body">
-                                    <button class="close" data-dismiss="alert">
-                                        <span>&times;</span>
-                                    </button>
-                                    Detail barang lebih
-                                </div>
+                        <div class="alert alert-info alert-dismissible show fade mt-4">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>&times;</span>
+                                </button>
+                                Detail barang lebih
                             </div>
+                        </div>
+                        <div class="barang-lebih">
+                            <img src="{{ $item->getImage() }}" width="150" alt="photo barang lebih" title="photo barang lebih">
+                        </div>
+                        <div class="table-responsive">
                             <table class="table table-hover table-bordered table-md">
                                 <tr class=" table-active">
                                     <th>No</th>

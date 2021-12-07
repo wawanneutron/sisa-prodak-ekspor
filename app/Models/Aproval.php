@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Aproval extends Model
 {
@@ -16,6 +17,15 @@ class Aproval extends Model
     public function overProduct()
     {
         return $this->belongsTo(OverProduct::class);
+    }
+
+    public function getImage()
+    {
+        if (!empty($this->overProduct->image)) {
+            return Storage::url('over-products/' . $this->overProduct->image);
+        } else {
+            return Storage::url('broken-image.png');
+        }
     }
 
     /*
