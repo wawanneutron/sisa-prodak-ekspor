@@ -18,19 +18,19 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::paginate(10);
-        return view('pages.admin-gudang.product.index', compact('products'));
+        return view('pages.dashboard.product.index', compact('products'));
     }
 
     public function supervisor()
     {
         $products = Product::paginate(10);
-        return view('pages.admin-gudang.product.index', compact('products'));
+        return view('pages.dashboard.product.index', compact('products'));
     }
 
     public function kepalaGudang()
     {
         $products = Product::paginate(10);
-        return view('pages.admin-gudang.product.index', compact('products'));
+        return view('pages.dashboard.product.index', compact('products'));
     }
 
     /**

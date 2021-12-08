@@ -1,13 +1,9 @@
 <?php
 
-use App\Http\Controllers\AdminGudang\AprovalController;
-use App\Http\Controllers\AdminGudang\DashboardController;
-use App\Http\Controllers\AdminGudang\OverProductController;
-use App\Http\Controllers\AdminGudang\PengajuanController;
+use App\Http\Controllers\StatistikController;
+use App\Http\Controllers\AprovalController;
+use App\Http\Controllers\OverProductController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\KepalaGudang\PengajuanController as KepalaGudangPengajuanController;
-use App\Http\Controllers\Supervisor\PengajuanController as SupervisorPengajuanController;
-use App\Models\OverProduct;
 use Illuminate\Support\Facades\Route;
 
 
@@ -17,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('admin-gudang')
     ->middleware(['auth', 'admin.gudang'])
     ->group(function () {
-        Route::get('/', [DashboardController::class, 'statistik'])
+        Route::get('/', [StatistikController::class, 'index'])
             ->name('statistik-admin');
 
         Route::resource('/data-products', ProductController::class, ['as' => 'dashboard']);
@@ -33,13 +29,16 @@ Route::prefix('admin-gudang')
 Route::prefix('supervisor')
     ->middleware(['auth', 'supervisor'])
     ->group(function () {
-        Route::get('/', [DashboardController::class, 'statistik'])
+        Route::get('/', [StatistikController::class, 'index'])
             ->name('statistik-spv');
 
         Route::get('/data-products', [ProductController::class, 'supervisor'])
             ->name('products-spv');
 
-        Route::get('/pengajuan', [SupervisorPengajuanController::class, 'index'])
+        Route::get('/over-products', [OverProductController::class, 'index'])
+            ->name('spv-over');
+
+        Route::get('/pengajuan', [AprovalController::class, 'index'])
             ->name('spv-pengajuan');
     });
 
@@ -48,12 +47,15 @@ Route::prefix('supervisor')
 Route::prefix('kepala-gudang')
     ->middleware(['auth', 'kepala.gudang'])
     ->group(function () {
-        Route::get('/', [DashboardController::class, 'statistik'])
+        Route::get('/', [StatistikController::class, 'index'])
             ->name('statistik-kepala');
 
         Route::get('/data-products', [ProductController::class, 'kepalaGudang'])
             ->name('products-kepala');
 
-        Route::get('/pengajuan', [KepalaGudangPengajuanController::class, 'index'])
+        Route::get('/over-products', [OverProductController::class, 'index'])
+            ->name('kepala-over');
+
+        Route::get('/pengajuan', [AprovalController::class, 'index'])
             ->name('kepala-pengajuan');
     });

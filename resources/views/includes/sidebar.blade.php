@@ -53,6 +53,8 @@
             <li 
                 class="nav-item 
                         {{ Request::is('admin-gudang/over-products') ? 'active' : '' }}
+                        {{ Request::is('supervisor/over-products') ? 'active' : '' }}
+                        {{ Request::is('kepala-gudang/over-products') ? 'active' : '' }}
                 ">
                 <a href="
                      @switch(auth()->user()->role)
@@ -60,8 +62,10 @@
                                 {{ route('dashboard.over-products.index') }}
                             @break
                             @case('SPV')
+                                {{ route('spv-over') }}
                             @break
                             @case('Kepala Gudang')
+                                {{ route('kepala-over') }}
                             @break
 
                             @default
