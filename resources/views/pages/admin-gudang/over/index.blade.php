@@ -389,7 +389,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Photo Barang Lebih</label><br>
-                                                <img src="{{ Storage::url('over-products/' . $product->image) }}" width="70" alt="photo barang lebih" title="photo barang lebih">
+                                                <img src="{{ Storage::url('over-products/' . $product->image) }}" class=" img-thumbnail" width="70" alt="photo barang lebih" title="photo barang lebih">
                                                 <input type="file" name="image" class="mt-2 form-control  @error('image') is-invalid @enderror">
                                             </input>
                                             @error('image')
@@ -410,67 +410,6 @@
                                             @enderror
                                         </div>
                                     </div>
-                                </div>
-                                 <div class="table-responsive">
-                                    <div class="alert alert-info alert-dismissible show fade mt-4">
-                                        <div class="alert-body">
-                                            <button class="close" data-dismiss="alert">
-                                                <span>&times;</span>
-                                            </button>
-                                            Detail barang lebih
-                                        </div>
-                                    </div>
-                                    <table class="table table-hover table-bordered table-md">
-                                        <tr class=" table-active">
-                                            <th>No</th>
-                                            <th>ID</th>
-                                            <th>No PO</th>
-                                            <th>Nama Barang</th>
-                                            <th>Quantity</th>
-                                            <th>Kondisi Barang</th>
-                                        </tr>
-                                        @foreach ($product->products as $index => $data)
-                                            <tr>
-                                                <td>{{ $index +1 }}</td>
-                                                <td>{{ $data->pivot->id }}</td>
-                                                <td>{{ $data->no_po }}</td>
-                                                <td>{{ $data->nama_barang }}</td>
-                                                <td>
-                                                    {{-- <div class="form-group">
-                                                        <label>Jumlah Barang Lebih</label>
-                                                        <input type="hidden" name="pivot_over[]" value="{{ $data->pivot->id }}">
-                                                        <input type="number" name="qty_over[]"
-                                                            class="form-control @error('qty_over') is-invalid @enderror"
-                                                            value="{{ old('qty_over') }}">
-                                                        @error('qty_over')
-                                                            <div class="invalid-feedback">
-                                                                {{ $message }}
-                                                            </div>
-                                                        @enderror
-                                                    </div> --}}
-                                                </td>
-                                                <td>
-                                                    {{-- <div class="form-group">
-                                                        <div class="form-group">
-                                                            <label>Status</label>
-                                                            <select name="kondisi[]" class=" form-control @error('kondisi') is-invalid @enderror">
-                                                                <option disabled selected>--Pilih kondisi prodak--</option>
-                                                                <option value="bagus" {{ $product->kondisi == 'bagus' ? 'selected' : '' }}>Bagus</option>
-                                                                <option value="rusak" {{ $product->kondisi == 'rusak' ? 'selected' : '' }}>Rusak</option>
-                                                                <option value="expired" {{ $product->kondisi == 'expired' ? 'selected' : '' }}>Expired</option>
-                                                            </select>
-                                                            @error('kondisi')
-                                                                <div class="invalid-feedback">
-                                                                    {{ $message }}
-                                                                </div>
-                                                            @enderror
-                                                        </div>
-                                                    </div> --}}
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </table>
-                                       
                                 </div>
                             </div>
                         </div>
@@ -528,65 +467,99 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="alert alert-info alert-dismissible show fade mt-4">
-                            <div class="alert-body">
-                                <button class="close" data-dismiss="alert">
-                                    <span>&times;</span>
-                                </button>
-                                Detail barang lebih
+                        {{-- view detail pengajuian --}}
+                        <section class="section">
+                            <div class="section-body">
+                                <div class="invoice" style="margin-bottom: 0px !important; padding-bottom: 10px !important;">
+                                <div class="invoice-print">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="invoice-title">
+                                                <h2>Detail Barang Lebih</h2>
+                                                <div class=" text-black-50 h5">Sisa Ekspor</div>
+                                            </div>
+                                            <div class="row mt-5">
+                                                <div class="col-md-3">
+                                                    <img src="{{ $item->getImage() }}" class="img-fluid" width="200" alt="photo barang lebih not found" title="photo barang lebih sisa ekspor" style=" border-radius: 8px;">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <address>
+                                                        <strong>Kode Barang Lebih</strong><br>
+                                                            {{ $item->over_product_id }}<br><br>
+                                                    </address>
+                                                    <address>
+                                                        <strong>Qty Barang Lebih</strong><br>
+                                                            {{ $item->qty_over }} Karton<br><br>
+                                                    </address>
+                                                </div>
+                                                <div class="col-md-3 text-md-left">
+                                                    <address>
+                                                        <strong>Catatan Barang Lebih</strong><br>
+                                                            {{ $item->note }}<br><br>
+                                                    </address>
+                                                    <address>
+                                                        <strong>Tanggal Input</strong><br>
+                                                           {{ $item->created_at }}<br><br>
+                                                    </address>
+                                                </div>
+                                                <div class="col-md-3 text-md-left">
+                                                    <address>
+                                                        <strong>Kondisi Barang</strong><br>
+                                                        <span class="d-none">{{ $dataItem = $item->kondisi }}</span>
+                                                            @switch($dataItem)
+                                                                @case('bagus')
+                                                                        <div class="badge badge-success mt-2">{{ $dataItem }}</div>
+                                                                    @break
+                                                                @case('rusak')
+                                                                        <div class="badge badge-danger mt-2">{{ $dataItem }}</div>
+                                                                    @break
+                                                                @case('expired')
+                                                                        <div class="badge badge-primary mt-2">{{ $dataItem }}</div>
+                                                                    @break
+                                                                @default
+                                                            @endswitch
+                                                    </address>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- print --}}
                             </div>
-                        </div>
-                        <div class="barang-lebih">
-                            <img src="{{ $item->getImage() }}" width="150" alt="photo barang lebih" title="photo barang lebih">
-                        </div>
+                        </section>
+                        <div class=" text-body text-bold mb-2" style="font-size: 18px">Detail Barang Lebih</div>
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered table-md">
                                 <tr class=" table-active">
                                     <th>No</th>
                                     <th>No PO</th>
                                     <th>Nama Barang</th>
-                                    <th>Kondisi Barang</th>
                                     <th>Export Country</th>
                                     <th>Tgl Export</th>
                                 </tr>
-                                @foreach ($item->products as $index => $data)
+                                @forelse ($item->products as $index => $data)
                                     <tr>
                                         <td>{{ $index +1 }}</td>
                                         <td>{{ $data->no_po }}</td>
                                         <td>{{ $data->nama_barang }}</td>
-                                        <td>
-                                            @if ($item->kondisi == 'bagus')
-                                                <div class="badge badge-success">{{ $item->kondisi }}</div>
-                                            @elseif($item->kondisi == 'rusak')
-                                                <div class="badge badge-danger">{{ $item->kondisi }}</div>
-                                            @else
-                                                <div class="badge badge-primary">{{ $item->kondisi }}</div>
-                                            @endif
-                                            {{-- <select name="kondisi[]" class=" form-control @error('kondisi') is-invalid @enderror">
-                                                <option disabled selected>--Pilih kondisi prodak--</option>
-                                                <option value="bagus" {{ $data->pivot->kondisi == 'bagus' ? 'selected' : '' }}>Bagus</option>
-                                                <option value="rusak" {{ $data->pivot->kondisi == 'rusak' ? 'selected' : '' }}>Rusak</option>
-                                                <option value="expired" {{ $data->pivot->kondisi == 'expired' ? 'selected' : '' }}>Expired</option>
-                                            </select> --}}
-                                        </td>
                                         <td>
                                             {{ $data->export_country }}
                                         </td>
                                         <td>
                                             {{ $data->tgl_export }}
                                         </td>
-                                        
-                                        {{-- <td>
-                                            <a href="{{ $data->pivot->id }}" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#subModal{{ $data->pivot->id }}">
-                                                <i class="fa fa-pencil-alt"></i>
-                                            </a>
-                                        </td> --}}
                                     </tr>
-                                    @endforeach
-                                </table>
-                                <tr>
-                                    <td><span><b>jumlah barang lebih {{ $item->qty_over }} Karton</b></span></td>
-                                </tr>
+                                @empty
+                                    <div class="alert alert-warning alert-dismissible show fade">
+                                        <div class="alert-body">
+                                            <button class="close" data-dismiss="alert">
+                                                <span>&times;</span>
+                                            </button>
+                                            Item produk tidak ada!, karena barang di <b>menu prodak</b> telah dihapus!
+                                        </div>
+                                    </div>
+                                @endforelse
+                            </table>
                         </div>
                     </div>
                 </div>

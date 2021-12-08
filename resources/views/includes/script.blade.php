@@ -38,7 +38,7 @@
         icon: "error",
         title: "GAGAL!",
         text: "{{ session('error') }}",
-        timer: 1500,
+        // timer: 1500,
         showConfirmButton: false,
         showCancelButton: false,
         buttons: false,
