@@ -270,7 +270,7 @@
                         </div>
                     </div>
                     <div class="modal-footer bg-whitesmoke br">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times mr-1"></i>Batal</button>
                         <button type="reset" class="btn btn-danger">
                             <i class="fa fa-redo mr-1"></i>Reset
                         </button>
@@ -329,7 +329,7 @@
                             </div>
                         </div>
                         <div class="modal-footer bg-whitesmoke br">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times mr-1"></i>Batal</button>
                             <button type="reset" class="btn btn-danger">
                                 <i class="fa fa-redo mr-1"></i>Reset
                             </button>

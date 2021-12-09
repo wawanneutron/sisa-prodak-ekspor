@@ -67,7 +67,7 @@
                                     @csrf
                                     @method('PUT')
                                     <div class="col-12 text-center mb-4">
-                                        <img src="{{ auth()->user()->getAvatar() }}" class=" rounded-circle img-thumbnail shadow" style="width: 220px; height: 220px;" alt="avatar not vound" title="Hii, {{ auth()->user()->first_name .' ' . auth()->user()->last_name }}"> <br>
+                                        <img src="{{ auth()->user()->getAvatar() }}" class=" rounded-circle img-thumbnail shadow" style="width: 220px; height: 220px !impirtant;" alt="avatar not vound" title="Hii, {{ auth()->user()->first_name .' ' . auth()->user()->last_name }}"> <br>
                                         <span class=" small"><i>update photo profile</i></span>
                                         <div class="form-group mb-5">
                                             <input type="file" name="avatar" id="avatar" class=" form-control-file @error('avatar') is-invalid @enderror">
@@ -117,7 +117,10 @@
                                         </div>
                                     </div>
                                     <div class="form-group mt-2">
-                                        <button type="submit" class=" btn btn-primary text-uppercase">update profile</button>
+                                        <button type="submit" class=" btn btn-primary text-uppercase"><i class="fa fa-paper-plane mr-1"></i>update profile</button>
+                                        <button type="reset" class="btn btn-danger">
+                                            <i class="fa fa-redo mr-1"></i>Reset
+                                        </button>
                                     </div>
                                 </form>
                             </div>
@@ -160,7 +163,10 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <button class="btn btn-primary text-uppercase" type="submit">Update Password</button>
+                                        <button class="btn btn-primary text-uppercase" type="submit"><i class="fa fa-paper-plane mr-1"></i>Update Password</button>
+                                        <button type="reset" class="btn btn-danger">
+                                            <i class="fa fa-redo mr-1"></i>Reset
+                                        </button>
                                     </div>
                                 </form>
                             </div>
