@@ -75,13 +75,13 @@
                                             <td>{{ $product->created_at }}</td>
                                             <td>
                                                 @if ($product->kondisi == 'approved')
-                                                    <div class="badge badge-success">{{ $product->kondisi }}</div>
+                                                    <div class="badge badge-success">Disetujui Oleh Kepala Gudang</div>
                                                 @elseif($product->kondisi == 'not checked')
-                                                    <div class="badge badge-danger">{{ $product->kondisi }}</div>
+                                                    <div class="badge badge-warning">Belum Disetujui</div>
                                                 @elseif($product->kondisi == 'pending')
-                                                    <div class="badge badge-primary">{{ $product->kondisi }}</div>
+                                                    <div class="badge badge-primary">Disetujui Oleh SPV</div>
                                                 @else
-                                                    <div class="badge badge-secondary">{{ $product->kondisi }}</div>
+                                                    <div class="badge badge-danger">Tidak Disetujui</div>
                                                 @endif
                                             </td>
                                             <td>{{ $product->catatan }}</td>
@@ -101,15 +101,21 @@
                                                 @break
                                                 @case('SPV')
                                                     <td>
-                                                        <a href="{{ $product->id }}" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalView{{ $product->id }}">
+                                                        <a href="{{ $product->id }}" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalView{{ $product->id }}">
                                                             <i class=" fa fa-eye"></i>
+                                                        </a>
+                                                        <a href="{{ $product->id }}" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalNonAdmin{{ $product->id }}">
+                                                            <i class=" fa fa-pencil-alt"></i>
                                                         </a>
                                                     </td>
                                                 @break
                                                 @case('Kepala Gudang')
                                                     <td>
-                                                        <a href="{{ $product->id }}" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalView{{ $product->id }}">
+                                                        <a href="{{ $product->id }}" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalView{{ $product->id }}">
                                                             <i class=" fa fa-eye"></i>
+                                                        </a>
+                                                        <a href="{{ $product->id }}" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalNonAdmin{{ $product->id }}">
+                                                            <i class=" fa fa-pencil-alt"></i>
                                                         </a>
                                                     </td>
                                                 @break
@@ -277,7 +283,7 @@
         </div>
     </div>
 
-    {{-- modal edit --}}
+    {{-- modal edit admin gudang--}}
     @foreach ($aprovalProducts as $pengajuan)
         <div class="modal fade" role="dialog" id="modalEditPengajuan{{ $pengajuan->id }}" data-backdrop="static" data-keyboard="false" aria-hidden="true">
             <div div class="modal-dialog modal-lg" role="document">
@@ -361,6 +367,85 @@
             </script>
         @endpush
     @endforeach
+
+    {{-- modal edit spv & kepala--}}
+    @foreach ($aprovalProducts as $pengajuan)
+        <div class="modal fade" role="dialog" id="modalNonAdmin{{ $pengajuan->id }}" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+            <div div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <form action="
+                            @switch(auth()->user()->role)
+                                @case('SPV')
+                                        {{ route('spv-pengajuan-update', $pengajuan->id) }}
+                                    @break
+                                @case('Kepala Gudang')
+                                        {{ route('kepala-pengajuan-update', $pengajuan->id) }}
+                                    @break
+                                @default
+                            @endswitch
+                        " method="post" enctype="multipart/form-data">
+                        @csrf
+                        @method('put')
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Status Pengajuan Barang Lebih <br>
+                                {{ $pengajuan->kd_pengajuan }}
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {{-- 'not checked','pending','approved','not approved' --}}
+                                        @switch(auth()->user()->role)
+                                            @case('SPV')
+                                                <select name="kondisi" id="kondisi" class=" form-control @error('kondisi') is-invalid @enderror">
+                                                    <option selected disabled>--Update Status Persetujuan--</option>
+                                                    <option value="pending">Disetujui Oleh Supervisor</option>
+                                                    <option value="not approved">Tidak Disetujui</option>
+                                                </select>
+                                                @error('kondisi')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                                @break
+                                            @case('Kepala Gudang')
+                                                <select name="kondisi" id="kondisi" class=" form-control @error('kondisi') is-invalid @enderror">
+                                                    <option selected disabled>--Update Status Persetujuan--</option>
+                                                    <option value="approved">Disetujui Oleh Kepala Gudang</option>
+                                                    <option value="not approved">Tidak Disetujui</option>
+                                                </select>
+                                                @error('kondisi')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                                @break
+                                            @default
+                                                
+                                        @endswitch
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer bg-whitesmoke br">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="reset" class="btn btn-danger">
+                                <i class="fa fa-redo mr-1"></i>Reset
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-paper-plane mr-1"></i>Simpan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
     
      {{-- modal view --}}
     @foreach ($aprovalProducts as $data)
@@ -400,13 +485,13 @@
                                                     <address>
                                                         <strong>Status Pengajuan</strong> <br>
                                                         @if ($data->kondisi == 'approved')
-                                                            <div class="btn btn-success mt-2">{{ $data->kondisi }}</div>
+                                                            <div class="badge badge-success mt-2">Disetujui Oleh Kepala Gudang</div>
                                                         @elseif($data->kondisi == 'not checked')
-                                                            <div class="btn btn-danger mt-2">{{ $data->kondisi }}</div>
+                                                            <div class="badge badge-warning mt-2">Belum Disetujui</div>
                                                         @elseif($data->kondisi == 'pending')
-                                                            <div class="btn btn-primary mt-2">{{ $data->kondisi }}</div>
+                                                            <div class="badge badge-primary mt-2">Disetujui Oleh SPV</div>
                                                         @else
-                                                            <div class="btn btn-secondary mt-2">{{ $data->kondisi }}</div>
+                                                            <div class="badge badge-danger mt-2">Tidak Disetujui</div>
                                                         @endif
                                                         <br><br>
                                                     </address>

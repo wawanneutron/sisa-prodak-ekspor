@@ -21,6 +21,8 @@ Route::prefix('admin-gudang')
 
         Route::resource('/pengajuan', AprovalController::class, ['as' => 'dashboard']);
 
+        Route::view('/account-setting', 'pages.dashboard.profile.index')->name('profile-admin');
+
         Route::get('/ajax/products/search', [ProductController::class, 'ajaxSearch']);
         Route::get('/ajax/over-products/search', [OverProductController::class, 'ajaxSearchOver']);
     });
@@ -32,7 +34,7 @@ Route::prefix('supervisor')
         Route::get('/', [StatistikController::class, 'index'])
             ->name('statistik-spv');
 
-        Route::get('/data-products', [ProductController::class, 'supervisor'])
+        Route::get('/data-products', [ProductController::class, 'index'])
             ->name('products-spv');
 
         Route::get('/over-products', [OverProductController::class, 'index'])
@@ -40,6 +42,11 @@ Route::prefix('supervisor')
 
         Route::get('/pengajuan', [AprovalController::class, 'index'])
             ->name('spv-pengajuan');
+
+        Route::put('/pengajuan/{id}', [AprovalController::class, 'update'])
+            ->name('spv-pengajuan-update');
+
+        Route::view('/account-setting', 'pages.dashboard.profile.index')->name('profile-spv');
     });
 
 
@@ -50,7 +57,7 @@ Route::prefix('kepala-gudang')
         Route::get('/', [StatistikController::class, 'index'])
             ->name('statistik-kepala');
 
-        Route::get('/data-products', [ProductController::class, 'kepalaGudang'])
+        Route::get('/data-products', [ProductController::class, 'index'])
             ->name('products-kepala');
 
         Route::get('/over-products', [OverProductController::class, 'index'])
@@ -58,4 +65,9 @@ Route::prefix('kepala-gudang')
 
         Route::get('/pengajuan', [AprovalController::class, 'index'])
             ->name('kepala-pengajuan');
+
+        Route::put('/pengajuan/{id}', [AprovalController::class, 'update'])
+            ->name('kepala-pengajuan-update');
+
+        Route::view('/account-setting', 'pages.dashboard.profile.index')->name('profile-kepala');
     });

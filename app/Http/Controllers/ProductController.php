@@ -21,18 +21,6 @@ class ProductController extends Controller
         return view('pages.dashboard.product.index', compact('products'));
     }
 
-    public function supervisor()
-    {
-        $products = Product::paginate(10);
-        return view('pages.dashboard.product.index', compact('products'));
-    }
-
-    public function kepalaGudang()
-    {
-        $products = Product::paginate(10);
-        return view('pages.dashboard.product.index', compact('products'));
-    }
-
     /**
      * Show the form for creating a new resource.
      *

@@ -561,6 +561,9 @@
                                 @endforelse
                             </table>
                         </div>
+                        <div class="text-md-right mt-4">
+                            <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
+                        </div>
                     </div>
                 </div>
             </div>

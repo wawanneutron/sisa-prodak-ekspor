@@ -99,12 +99,30 @@
                 </a>
             </li>
             <li class="menu-header">Account</li>
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link has-dropdown"><i class="far fa-user"></i> <span>My Account</span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Setting Account</a></li>
-                    <li><a href="#">Setting Profile</a></li>
-                </ul>
+            <li
+                class="nav-item 
+                    {{ Request::is('admin-gudang/account-setting') ? 'active' : '' }}
+                    {{ Request::is('supervisor/account-setting') ? 'active' : '' }}
+                    {{ Request::is('kepala-gudang/account-setting') ? 'active' : '' }}
+            ">
+                <a class="nav-link" href="
+                    @switch(auth()->user()->role)
+                        @case('Admin Gudang')
+                                {{ route('profile-admin') }}
+                            @break
+                            @case('SPV')
+                                {{ route('profile-spv') }}
+                            @break
+                            @case('Kepala Gudang')
+                                {{ route('profile-kepala') }}
+                            @break
+
+                            @default
+                                {{ route('login') }}
+                    @endswitch
+                    ">
+                    <i class="far fa-user"></i><span>My Account</span>
+                </a>
             </li>
         </ul>
 

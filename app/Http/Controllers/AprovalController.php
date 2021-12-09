@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Aproval;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class AprovalController extends Controller
@@ -117,33 +118,84 @@ class AprovalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'editAproval' => 'required',
-            'catatan' => 'required'
-        ]);
+        $account = Auth::user()->role;
+        $aprovals = Aproval::find($id);
 
-        try {
-            //code...
-            $aprovals = Aproval::find($id);
-            $aprovals->update([
-                'over_product_id' => $request->editAproval,
-                'catatan'     => $request->catatan,
-            ]);
-            // $aprovals->overProducts()->sync($request->get('editApprovals'));
-            if ($aprovals) {
-                return redirect()->route('dashboard.pengajuan.index')
-                    ->with(['success' => 'Data Berhasil Diupdate']);
-            } else {
-                return redirect()->route('dashboard.pengajuan.index')
-                    ->with(['error' => 'Data Gagal Diupdate']);
-            }
-        } catch (\Throwable $th) {
-            //throw $th;
-            if ($th->getCode() == 23000) {
-                // Deal with duplicate key error  
-                return redirect()->route('dashboard.pengajuan.index')
-                    ->with(['error' => 'Kode barang lebih yang sama sudah pernah diajukan']);
-            }
+        switch ($account) {
+            case 'Admin Gudang':
+                # code...
+                try {
+                    $this->validate($request, [
+                        'editAproval' => 'required',
+                        'catatan' => 'required'
+                    ]);
+                    if ($aprovals->over_product_id != true) {
+                        # code...
+                        $aprovals->update([
+                            'over_product_id' => $request->editAproval,
+                            'catatan'     => $request->catatan,
+                        ]);
+                    } else {
+                        # code...
+                        $aprovals->update([
+                            'over_product_id' => $aprovals->over_product_id,
+                            'catatan'     => $request->catatan,
+                        ]);
+                    }
+                    // $aprovals->overProducts()->sync($request->get('editApprovals'));
+                    if ($aprovals) {
+                        return redirect()->route('dashboard.pengajuan.index')
+                            ->with(['success' => 'Data Berhasil Diupdate']);
+                    } else {
+                        return redirect()->route('dashboard.pengajuan.index')
+                            ->with(['error' => 'Data Gagal Diupdate']);
+                    }
+                } catch (\Exception $th) {
+                    //throw $th;
+                    if ($th->getCode() == 23000) {
+                        // Deal with duplicate key error  
+                        return redirect()->route('dashboard.pengajuan.index')
+                            ->with(['error' => 'Kode barang lebih yang sama sudah pernah diajukan']);
+                    }
+                }
+                break;
+            case 'SPV':
+                # code...
+                $this->validate($request, [
+                    'kondisi' => 'required',
+                ]);
+                $aprovals->update([
+                    'kondisi' => $request->kondisi
+                ]);
+
+                if ($aprovals) {
+                    return redirect()->route('spv-pengajuan')
+                        ->with(['success' => 'Data Berhasil Diupdate']);
+                } else {
+                    return redirect()->route('spv-pengajuan')
+                        ->with(['error' => 'Data Gagal Diupdate']);
+                }
+                break;
+            case 'Kepala Gudang':
+                # code...
+                $this->validate($request, [
+                    'kondisi' => 'required',
+                ]);
+                $aprovals->update([
+                    'kondisi' => $request->kondisi
+                ]);
+
+                if ($aprovals) {
+                    return redirect()->route('kepala-pengajuan')
+                        ->with(['success' => 'Data Berhasil Diupdate']);
+                } else {
+                    return redirect()->route('kepala-pengajuan')
+                        ->with(['error' => 'Data Gagal Diupdate']);
+                }
+                break;
+            default:
+                # code...
+                break;
         }
     }
 

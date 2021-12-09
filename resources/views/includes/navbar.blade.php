@@ -13,14 +13,26 @@
     </form>
     <ul class="navbar-nav navbar-right">
         <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                <img alt="image" src="{{ url('/stisla-master/assets/img/avatar/avatar-1.png') }}" class="rounded-circle mr-1">
+                <img alt="image" src="{{ auth()->user()->getAvatar() }}" class="rounded-circle shadow mr-1" alt="avatar not vound" style="width: 45px; height: 45px;">
                 <div class="d-sm-none d-lg-inline-block">Hi, {{ auth()->user()->first_name }} ({{ auth()->user()->role }})</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="features-profile.html" class="dropdown-item has-icon">
-                    <i class="far fa-user"></i> Profile
-                </a>
-                <a href="features-settings.html" class="dropdown-item has-icon">
+                <a href="
+                    @switch(auth()->user()->role)
+                        @case('Admin Gudang')
+                                {{ route('profile-admin') }}
+                            @break
+                            @case('SPV')
+                                {{ route('profile-spv') }}
+                            @break
+                            @case('Kepala Gudang')
+                                {{ route('profile-kepala') }}
+                            @break
+
+                            @default
+                                {{ route('login') }}
+                    @endswitch
+                " class="dropdown-item has-icon">
                     <i class="fas fa-cog"></i> Settings
                 </a>
                 <div class="dropdown-divider"></div>

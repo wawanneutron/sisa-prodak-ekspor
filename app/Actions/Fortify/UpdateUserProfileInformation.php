@@ -3,6 +3,7 @@
 namespace App\Actions\Fortify;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
@@ -19,7 +20,9 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     public function update($user, array $input)
     {
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:50'],
+            'last_name'  => ['required', 'string', 'max:50'],
+            'avatar'     => ['image', 'mimes:jpeg,png,jpg', 'max:1000'],
 
             'email' => [
                 'required',
@@ -30,14 +33,35 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             ],
         ])->validateWithBag('updateProfileInformation');
 
-        if ($input['email'] !== $user->email &&
-            $user instanceof MustVerifyEmail) {
+        if (
+            $input['email'] !== $user->email &&
+            $user instanceof MustVerifyEmail
+        ) {
             $this->updateVerifiedUser($user, $input);
         } else {
-            $user->forceFill([
-                'name' => $input['name'],
-                'email' => $input['email'],
-            ])->save();
+            // cek jika tidak ada request gambar
+            if (request()->file('avatar') == null) {
+                # code...
+                $user->forceFill([
+                    'first_name' => $input['first_name'],
+                    'last_name' => $input['last_name'],
+                    'email' => $input['email'],
+                ])->save();
+            } else {
+                # code...
+                // hapus photo lama dan update data baru
+                Storage::disk('local')->delete('public/profile/' . $user->avatar);
+
+                $image = request()->file('avatar');
+                $image->storeAs('public/profile', $image->hashName());
+
+                $user->forceFill([
+                    'first_name'   => $input['first_name'],
+                    'last_name'    => $input['last_name'],
+                    'email'        => $input['email'],
+                    'avatar'       => $input['avatar'] = $image->hashName()
+                ])->save();
+            }
         }
     }
 

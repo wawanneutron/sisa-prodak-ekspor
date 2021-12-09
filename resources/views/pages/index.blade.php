@@ -59,6 +59,7 @@
                         <div class="card-wrap">
                             <div class="card-header">
                                 <h4>Pengajuan Pending</h4>
+                                <span style="font-size: 12px">oleh supervisor</span>
                             </div>
                             <div class="card-body">
                                 {{ $aprovalPending }}
@@ -89,6 +90,7 @@
                         <div class="card-wrap">
                             <div class="card-header">
                                 <h4>Pengajuan Approved</h4>
+                                <span style="font-size: 12px">oleh kepala gudang</span>
                             </div>
                             <div class="card-body">
                                 {{ $aprovalAprove }}
