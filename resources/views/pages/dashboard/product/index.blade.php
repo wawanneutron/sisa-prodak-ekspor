@@ -3,7 +3,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Data Products ({{ auth()->user()->role }})</h1>
+                <h1>Data Products</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active">
                         <a href="
@@ -56,6 +56,19 @@
                                     @break
 
                                 @endswitch
+                            </div>
+                            <div class="card-header" style="margin-top: -30px;">
+                                <h4></h4>
+                                <div class="card-header-form">
+                                    <form>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="cari berdasarkan no PO">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
