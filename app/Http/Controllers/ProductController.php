@@ -17,7 +17,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::paginate(10);
+        $products = Product::latest()
+            ->when(request()->q, function ($products) {
+                $products = $products->where('no_po', 'like', '%' . request()->q . '%');
+            })
+            ->paginate(5);
+
         return view('pages.dashboard.product.index', compact('products'));
     }
 

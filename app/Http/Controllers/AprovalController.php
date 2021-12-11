@@ -17,9 +17,13 @@ class AprovalController extends Controller
      */
     public function index()
     {
-        $approvalOverProducts = Aproval::with('overProduct')->paginate(10);
+        $approvalOverProducts = Aproval::with('overProduct')
+            ->latest()
+            ->when(request()->q, function ($approvalOverProducts) {
+                $approvalOverProducts = $approvalOverProducts->where('kd_pengajuan', 'like', '%' . request()->q . '%');
+            })
+            ->paginate(10);
 
-        // dd($approvalOverProducts);
         return view('pages.dashboard.pengajuan.index', [
             'aprovalProducts' => $approvalOverProducts
         ]);

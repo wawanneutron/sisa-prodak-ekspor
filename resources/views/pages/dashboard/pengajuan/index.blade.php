@@ -60,9 +60,24 @@
                             <div class="card-header" style="margin-top: -30px;">
                                 <h4></h4>
                                 <div class="card-header-form">
-                                    <form>
+                                    <form action="
+                                                @switch(auth()->user()->role)                                                                                                                                             
+                                                    @case('Admin Gudang')
+                                                        {{ route('dashboard.pengajuan.index') }}
+                                                    @break
+                                                    @case('SPV')
+                                                        {{ route('spv-pengajuan') }}
+                                                    @break
+                                                    @case('Kepala Gudang')
+                                                        {{ route('kepala-pengajuan') }}
+                                                    @break
+
+                                                    @default
+                                                        {{ route('login') }}
+                                                @endswitch
+                                            " method="GET">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="cari berdasarkan kode">
+                                            <input type="text" name="q" class="form-control" placeholder="cari berdasarkan kode">
                                             <div class="input-group-btn">
                                                 <button class="btn btn-primary"><i class="fas fa-search"></i></button>
                                             </div>

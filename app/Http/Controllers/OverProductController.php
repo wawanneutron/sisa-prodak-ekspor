@@ -18,7 +18,11 @@ class OverProductController extends Controller
      */
     public function index()
     {
-        $overProducts = OverProduct::paginate(10);
+        $overProducts = OverProduct::latest()
+            ->when(request()->q, function ($overProducts) {
+                $overProducts = $overProducts->where('over_product_id', 'like', '%' . request()->q . '%');
+            })
+            ->paginate(5);
 
         return view('pages.dashboard.over.index', compact('overProducts'));
     }
