@@ -168,9 +168,16 @@ class AprovalController extends Controller
                 $this->validate($request, [
                     'kondisi' => 'required',
                 ]);
-                $aprovals->update([
-                    'kondisi' => $request->kondisi
-                ]);
+
+                if ($aprovals->kondisi == 'approved') {
+                    return redirect()->route('spv-pengajuan')
+                        ->with(['error' => 'pengajuan ini sudah disetujui oleh kepala gudang']);
+                } else {
+                    # code...
+                    $aprovals->update([
+                        'kondisi' => $request->kondisi
+                    ]);
+                }
 
                 if ($aprovals) {
                     return redirect()->route('spv-pengajuan')
