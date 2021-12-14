@@ -7,7 +7,7 @@
     <!-- General CSS Files -->
     <link rel="stylesheet" href="{{ public_path('/stisla-master/assets/css/bootstrap.min.css') }}" >
 
-    <title>Laporan Product</title>
+    <title>Laporan Barang Lebih</title>
 </head>
 <body>
     <div class="text-center mb-5">Data Laporan Barang Lebih Sisa Ekspor PT. Mayora Tbk.</div>
@@ -56,7 +56,7 @@
         <div class="footer mt-5 text-right">
             <div class="text-header">Mengetahui</div>
                  <img src="{{ public_path('/storage/ttd1.png') }}" width="90" alt="">
-            <div class="text-header">{{ auth()->user()->role }}</div>
+            <div class="text-header">Admin Gudang</div>
         </div>
         <div class="">
             <span style=" font-size: 12px;">

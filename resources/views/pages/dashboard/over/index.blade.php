@@ -2,7 +2,7 @@
 @section('content')
     <div class="main-content">
         <section class="section">
-            <div class="section-header">
+            <div class="section-header" style="margin-bottom: 50px !important;">
                 <h1>Data Barang Lebih Sisa Ekspor</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active">
@@ -28,17 +28,27 @@
                 </div>
             </div>
             <div class="section-body">
-                <div class=" float-right d-md-block d-none mt-4">
-                    <a href="{{ route('admin-laporan-barang-lebih') }}" target="__balnk" class=" btn btn-info btn-sm">
+                <div class=" float-right" style="margin-top: -30px;">
+                    <a href="
+                            @switch(auth()->user()->role)                                                                                                                                             
+                                @case('Admin Gudang')
+                                    {{ route('admin-laporan-barang-lebih') }}
+                                @break
+                                @case('SPV')
+                                    {{ route('spv-laporan-barang-lebih') }}
+                                @break
+                                @case('Kepala Gudang')
+                                    {{ route('kepala-laporan-barang-lebih') }}
+                                @break
+
+                                @default
+                                    {{ route('login') }}
+                            @endswitch
+                        " target="__balnk" class=" btn btn-info btn-sm">
                         <i class="fas fa-file-download mr-2"></i>Download Laporan
                     </a>
                 </div>
-                <div class=" d-md-none d-sm-block">
-                    <a href="{{ route('admin-laporan-barang-lebih') }}" class=" btn btn-info btn-sm" target="__balnk"><i class="fas fa-file-download mr-2">
-                        </i>Download
-                    </a>
-                </div>
-                <h2 class="section-title">Barang Lebih</h2>
+                <h2 class="section-title" style="padding-top: 30px;">Barang Lebih</h2>
                     <p class="section-lead">Ini adalah barang lebih sisa ekspor</p>
                 <div class="row">
                     <div class="col-12 col-md-12">
@@ -590,7 +600,22 @@
                             </table>
                         </div>
                         <div class="text-md-right mt-4">
-                            <a href="{{ route('print-laporan-baranglebih', $item->id) }}" target="__blank" class="btn btn-warning btn-icon icon-left">
+                            <a href="
+                                @switch(auth()->user()->role)                                                                                                                                             
+                                    @case('Admin Gudang')
+                                        {{ route('print-laporan-baranglebih', $item->id) }}
+                                    @break
+                                    @case('SPV')
+                                        {{ route('spv-print-laporan-baranglebih', $item->id) }}
+                                    @break
+                                    @case('Kepala Gudang')
+                                        {{ route('kepala-print-laporan-baranglebih', $item->id) }}
+                                    @break
+
+                                    @default
+                                        {{ route('login') }}
+                                @endswitch
+                            " target="__blank" class="btn btn-warning btn-icon icon-left">
                                 <i class="fas fa-print"></i>Print
                             </a>
                         </div>

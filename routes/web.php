@@ -26,7 +26,7 @@ Route::prefix('admin-gudang')
 
         /* generate pdf */
         Route::get('/laporan-product', [LaporanController::class, 'laporanProduct'])->name('admin-laporan-product');
-        Route::get('/print-product/{id}', [LaporanController::class, 'printProduct'])->name('print-laporan-product');
+        Route::get('/print-product/{id}', [LaporanController::class, 'printProduct'])->name('admin-print-laporan-product');
 
         Route::get('/laporan-baranglebih', [LaporanController::class, 'laporanBarangLebih'])->name('admin-laporan-barang-lebih');
         Route::get('/print-baranglebih/{id}', [LaporanController::class, 'printBarangLebih'])->name('print-laporan-baranglebih');
@@ -59,6 +59,16 @@ Route::prefix('supervisor')
             ->name('spv-pengajuan-update');
 
         Route::view('/account-setting', 'pages.dashboard.profile.index')->name('profile-spv');
+
+        /* generate pdf */
+        Route::get('/laporan-product', [LaporanController::class, 'laporanProduct'])->name('spv-laporan-product');
+        Route::get('/print-product/{id}', [LaporanController::class, 'printProduct'])->name('spv-print-laporan-product');
+
+        Route::get('/laporan-baranglebih', [LaporanController::class, 'laporanBarangLebih'])->name('spv-laporan-barang-lebih');
+        Route::get('/print-baranglebih/{id}', [LaporanController::class, 'printBarangLebih'])->name('spv-print-laporan-baranglebih');
+
+        Route::get('/laporan-pengajuan', [LaporanController::class, 'laporanPengajuan'])->name('spv-laporan-pengajuan');
+        Route::get('/print-pengajuan/{id}', [LaporanController::class, 'printPengajuan'])->name('spv-print-laporan-pengajuan');
     });
 
 
@@ -82,4 +92,14 @@ Route::prefix('kepala-gudang')
             ->name('kepala-pengajuan-update');
 
         Route::view('/account-setting', 'pages.dashboard.profile.index')->name('profile-kepala');
+
+        /* generate pdf */
+        Route::get('/laporan-product', [LaporanController::class, 'laporanProduct'])->name('kepala-laporan-product');
+        Route::get('/print-product/{id}', [LaporanController::class, 'printProduct'])->name('kepala-print-laporan-product');
+
+        Route::get('/laporan-baranglebih', [LaporanController::class, 'laporanBarangLebih'])->name('kepala-laporan-barang-lebih');
+        Route::get('/print-baranglebih/{id}', [LaporanController::class, 'printBarangLebih'])->name('kepala-print-laporan-baranglebih');
+
+        Route::get('/laporan-pengajuan', [LaporanController::class, 'laporanPengajuan'])->name('kepala-laporan-pengajuan');
+        Route::get('/print-pengajuan/{id}', [LaporanController::class, 'printPengajuan'])->name('kepala-print-laporan-pengajuan');
     });

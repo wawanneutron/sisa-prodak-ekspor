@@ -54,7 +54,7 @@
         <div class="footer mt-5 text-right">
             <div class="text-header">Mengetahui</div>
                 <img src="{{ public_path('/storage/ttd1.png') }}" width="90" alt="">
-            <div class="text-header mt-4">{{ auth()->user()->role }}</div>
+            <div class="text-header mt-4">Admin Gudang</div>
         </div>
         <div class="">
             <span style=" font-size: 12px;">

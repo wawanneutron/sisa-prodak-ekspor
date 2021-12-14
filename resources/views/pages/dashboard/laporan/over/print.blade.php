@@ -87,8 +87,8 @@
             <div class="mt-5">
                 <div class="float-right">
                     <div class="text-header">Mengetahui</div>
-                    <br> <br> <br>
-                    <div class="text-header ">{{ auth()->user()->role }}</div>
+                        <img src="{{ public_path('/storage/ttd1.png') }}" width="90" alt="">
+                    <div class="text-header">Admin Gudang</div>
                 </div>
                 <div>
                     <span style=" font-size: 12px;">dicetak tanggal
