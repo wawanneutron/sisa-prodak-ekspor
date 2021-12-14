@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\StatistikController;
 use App\Http\Controllers\AprovalController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\OverProductController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,17 @@ Route::prefix('admin-gudang')
 
         Route::view('/account-setting', 'pages.dashboard.profile.index')->name('profile-admin');
 
+        /* generate pdf */
+        Route::get('/laporan-product', [LaporanController::class, 'laporanProduct'])->name('admin-laporan-product');
+        Route::get('/print-product/{id}', [LaporanController::class, 'printProduct'])->name('print-laporan-product');
+
+        Route::get('/laporan-baranglebih', [LaporanController::class, 'laporanBarangLebih'])->name('admin-laporan-barang-lebih');
+        Route::get('/print-baranglebih/{id}', [LaporanController::class, 'printBarangLebih'])->name('print-laporan-baranglebih');
+
+        Route::get('/laporan-pengajuan', [LaporanController::class, 'laporanPengajuan'])->name('laporan-pengajuan');
+        Route::get('/print-pengajuan/{id}', [LaporanController::class, 'printPengajuan'])->name('print-laporan-pengajuan');
+
+        /* ajax search select2*/
         Route::get('/ajax/products/search', [ProductController::class, 'ajaxSearch']);
         Route::get('/ajax/over-products/search', [OverProductController::class, 'ajaxSearchOver']);
     });

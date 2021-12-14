@@ -28,14 +28,14 @@
                 </div>
             </div>
             <div class="section-body">
-                <div class=" float-right d-md-block d-none">
-                    <a href="#" class=" btn btn-info btn-sm">
+                <div class="float-right d-md-block d-none mt-4">
+                    <a href="{{ route('admin-laporan-product') }}" target="__balnk" class=" btn btn-info btn-sm">
                         <i class="fas fa-file-download mr-2"></i>Download Laporan
                     </a>
                 </div>
                 <div class=" d-md-none d-sm-block">
-                    <a href="#" class=" btn btn-info btn-sm"><i class="fas fa-file-download mr-2">
-                        </i>Download Laporan
+                    <a href="{{ route('admin-laporan-product') }}" target="__balnk" class=" btn btn-info btn-sm"><i class="fas fa-file-download mr-2">
+                        </i>Download
                     </a>
                 </div>
                 <h2 class="section-title">Data Produk</h2>
@@ -551,7 +551,7 @@
                                     </div>
                                 </div>
                                 <div class="text-md-right">
-                                    <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
+                                    <a href="{{ route('print-laporan-product', $product->id) }}" target="__blank" class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</a>
                                 </div>
                             </div>
                         </section>
