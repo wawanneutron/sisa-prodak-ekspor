@@ -432,6 +432,7 @@
                                                 <select name="kondisi" id="kondisi" class=" form-control @error('kondisi') is-invalid @enderror">
                                                     <option selected disabled>--Update Status Persetujuan--</option>
                                                     <option value="pending">Disetujui Oleh Supervisor</option>
+                                                    <option value="not checked">Belum Disetujui</option>
                                                     <option value="not approved">Tidak Disetujui</option>
                                                 </select>
                                                 @error('kondisi')
@@ -444,6 +445,7 @@
                                                 <select name="kondisi" id="kondisi" class=" form-control @error('kondisi') is-invalid @enderror">
                                                     <option selected disabled>--Update Status Persetujuan--</option>
                                                     <option value="approved">Disetujui Oleh Kepala Gudang</option>
+                                                    <option value="not checked">Belum Disetujui</option>
                                                     <option value="not approved">Tidak Disetujui</option>
                                                 </select>
                                                 @error('kondisi')

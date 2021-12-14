@@ -53,7 +53,7 @@
         </table>
         <div class="footer mt-5 text-right">
             <div class="text-header">Mengetahui</div>
-            <br> <br> <br>
+                <img src="{{ public_path('/storage/ttd1.png') }}" width="90" alt="">
             <div class="text-header mt-4">{{ auth()->user()->role }}</div>
         </div>
         <div class="">
