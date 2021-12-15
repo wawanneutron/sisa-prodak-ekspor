@@ -560,24 +560,25 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text-md-right">
-                                    <a href="
-                                        @switch(auth()->user()->role)                                                                                                                                             
-                                            @case('Admin Gudang')
-                                                {{ route('admin-print-laporan-product', $product->id) }}
-                                            @break
-                                            @case('SPV')
-                                                {{ route('spv-print-laporan-product', $product->id) }}
-                                            @break
-                                            @case('Kepala Gudang')
-                                                {{ route('kepala-print-laporan-product', $product->id) }}
-                                            @break
+                            </div>
+                            <div class="text-md-right">
+                                <button type="button" class="btn btn-secondary mr-1" data-dismiss="modal"><i class="fas fa-times mr-1"></i>Batal</button>
+                                <a href="
+                                    @switch(auth()->user()->role)                                                                                                                                             
+                                        @case('Admin Gudang')
+                                            {{ route('admin-print-laporan-product', $product->id) }}
+                                        @break
+                                        @case('SPV')
+                                            {{ route('spv-print-laporan-product', $product->id) }}
+                                        @break
+                                        @case('Kepala Gudang')
+                                            {{ route('kepala-print-laporan-product', $product->id) }}
+                                        @break
 
-                                            @default
-                                                {{ route('login') }}
-                                        @endswitch
-                                    " target="__blank" class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</a>
-                                </div>
+                                        @default
+                                            {{ route('login') }}
+                                    @endswitch
+                                " target="__blank" class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</a>
                             </div>
                         </section>
                     </div>

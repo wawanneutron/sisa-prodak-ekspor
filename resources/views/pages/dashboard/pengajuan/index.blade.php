@@ -626,6 +626,7 @@
                                 {{-- <span><b>jumlah barang lebih {{ $item->overProducts->sum('qty_over') }} Karton</b></span> --}}
                         </div>
                         <div class="text-md-right mt-4">
+                            <button type="button" class="btn btn-secondary mr-1" data-dismiss="modal"><i class="fas fa-times mr-1"></i>Batal</button>
                             <a href="
                                 @switch(auth()->user()->role)                                                                                                                                             
                                     @case('Admin Gudang')
