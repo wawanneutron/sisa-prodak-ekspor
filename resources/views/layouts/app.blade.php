@@ -9,6 +9,7 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>Manajemen Barang Lebih &mdash; PT. Torabika Eka Semesta</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('/stisla-master/assets/img/mayora-img.png') }}">
 
     @include('includes.style')
 </head>
