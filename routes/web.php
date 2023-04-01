@@ -8,6 +8,11 @@ use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 
+// default route redirect to login
+Route::get('/', function () {
+  return view('auth.login');
+});
+
 
 /* admin gudang */
 
